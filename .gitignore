@@ -109,6 +109,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+/.idea/
+/venv/
+*.pyc
+*.log.*
+*.pickle
 
 # Spyder project settings
 .spyderproject
