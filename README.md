@@ -1,5 +1,5 @@
 # PythonWEB
-Active WEB server using Python
+Learn Active WEB server using Python
 
 Doron Raifman
 draifman@gmail.com
