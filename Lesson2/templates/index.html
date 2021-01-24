@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My WEB site</title>
+    <meta name="description" content="My first WEB server">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/App.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="/static/js/App.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row" id="top_line">
+        <div class="col-sm-3">
+            <img class="logo" src="/static/favicon.ico" alt="Logo">
+        </div>
+        <div class="col-sm-9">
+            <h3>My WEB site</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-5">
+            <button type="button" onclick="click_me(this)">Please click me</button>
+        </div>
+        <div class="col-sm-5">
+            <div>
+                <p id="response_id"></p>
+            </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
