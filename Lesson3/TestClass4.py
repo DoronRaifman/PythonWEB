@@ -25,10 +25,7 @@ if __name__ == '__main__':
         ['Doron', 62, 180], ['Guy', 45, 170], ['Adi', 41, 163],
         ['Gal', 23, 171], ['Raz', 19, 173], ['Tomer', 32, 175],
     ]
-    students = []
-    for data in input_data:
-        student = Student(data[0], data[1], data[2])
-        students.append(student)
+    students = [Student(data[0], data[1], data[2]) for data in input_data]
     Student.print_students(students, 'initial')
 
     students_sorted1 = sorted(students, key=lambda student:student.age, reverse=True)
