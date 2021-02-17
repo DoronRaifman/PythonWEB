@@ -17,6 +17,7 @@ def get_multiply_matrix_nice():
 # no python loops
 def get_multiply_matrix_numpy():
     vector = np.arange(1, 10+1, dtype=np.int)
+    # wtf = vector[:, None]
     return vector * vector[:, None]
 
 
@@ -25,8 +26,15 @@ def get_multiply_matrix_numpy_outer():
     return np.outer(vector, vector)
 
 
+def get_multiply_matrix_numpy_simple():
+    vector = np.arange(1, 10+1, dtype=np.int)
+    mtx = np.tile(vector, (10, 1)).transpose()
+    result = vector * mtx
+    return result
+
+
 if __name__ == '__main__':
-    multiply_matrix = get_multiply_matrix_numpy_outer()
+    multiply_matrix = get_multiply_matrix_numpy_simple()
     print(multiply_matrix)
     print(multiply_matrix[2:5, 5:7])
     print(np.where(multiply_matrix <= 50, multiply_matrix, -1))

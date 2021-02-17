@@ -2,7 +2,7 @@ tuple1 = (1, 2, 3, 'string1')
 print(f'tuple: {tuple1}')
 list1 = [1, 2, 3, 'string1']
 print(f'list: {list1}')
-dict1 = {1: 1, 2: 2, 3: 3, 'string1': 'string1'}
+dict1 = {1: 1, 2: 2, 3: 3, 'string1': 'string1', (1, 2): 'tuple'}
 print(f'dict: {dict1}')
 
 list1.append(tuple1)
