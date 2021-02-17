@@ -29,12 +29,12 @@ def get_multiply_matrix_numpy_outer():
 def get_multiply_matrix_numpy_simple():
     vector = np.arange(1, 10+1, dtype=np.int)
     mtx = np.tile(vector, (10, 1)).transpose()
-    result = vector * mtx
-    return result
+    return vector * mtx
 
 
 if __name__ == '__main__':
     multiply_matrix = get_multiply_matrix_numpy_simple()
+    # multiply_matrix = get_multiply_matrix_numpy()
     print(multiply_matrix)
     print(multiply_matrix[2:5, 5:7])
     print(np.where(multiply_matrix <= 50, multiply_matrix, -1))
