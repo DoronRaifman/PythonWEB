@@ -1,7 +1,5 @@
-
 def factorial(n):
-    res = n * factorial(n-1) if n > 1 else 1
-    return res
+    return(n * factorial(n-1) if n > 1 else 1)
 
 
 n = 3
