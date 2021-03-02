@@ -9,5 +9,5 @@ def hanoi(n, src, use, dst):
 
 
 if __name__ == '__main__':
-    hanoi(3, 1, 2, 3)
+    hanoi(2, 1, 2, 3)
 
