@@ -6,10 +6,10 @@ from Lesson3.Chess.Pieces import PiecePawn, PieceRook, PieceKnight, \
 
 class PieceBase:
     def __init__(self, board: Board, row:int, col:int, piece_type:PieceType,
-                 Piece_color:PieceColor):
+                 piece_color:PieceColor):
         self.row, self.col = row, col
         self.piece_type:PieceType = piece_type
-        self.piece_color:Piece_color = Piece_color
+        self.piece_color:PieceColor = piece_color
         self.board:Board = board
 
     def __str__(self):
