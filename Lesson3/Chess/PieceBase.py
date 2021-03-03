@@ -9,7 +9,7 @@ class PieceBase:
                  Piece_color:PieceColor):
         self.row, self.col = row, col
         self.piece_type:PieceType = piece_type
-        self.piece_color = Piece_color
+        self.piece_color:Piece_color = Piece_color
         self.board:Board = board
 
     def __str__(self):
@@ -53,7 +53,7 @@ class PieceBase:
 
     def get_all_theoretical_possible_moves(self):
         # return all theoretical possible moves even if outside board.
-        #   ignore existing Pieces
+        #   ignore existing pieces
         # return list of tuples [(delta_row, delta_col), ]
         # return [(0, 0)]
         raise Exception("Don't call me")

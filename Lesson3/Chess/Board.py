@@ -36,18 +36,18 @@ class Board:
             (4, PieceType.Queen), (5, PieceType.King),
         ]
         for officer in board_officers_data:
-            col, peace_type = officer
+            col, piece_type = officer
             self.board[(1, col)] = PieceBase.piece_factory(
-                self, 1, col, peace_type, PieceColor.White)
+                self, 1, col, piece_type, PieceColor.White)
             self.board[(8, col)] = PieceBase.piece_factory(
-                self, 8, col, peace_type, PieceColor.White)
+                self, 8, col, piece_type, PieceColor.White)
 
         pones_white = [(2, col, PieceType.Pawn, PieceColor.White) for col in range(1, 9)]
         pones_black = [(7, col, PieceType.Pawn, PieceColor.Black) for col in range(1, 9)]
         for pone in pones_white + pones_black:
-            row, col, peace_type, peace_color = pone
+            row, col, piece_type, piece_color = pone
             self.board[(row, col)] = PieceBase.piece_factory(
-                self, row, col, peace_type, peace_color)
+                self, row, col, piece_type, piece_color)
 
     def get_board_copy(self):
         new_board = copy.deepcopy(self)
