@@ -38,7 +38,7 @@ class PieceBase:
     def get_piece(self, row, col):
         return self.board.get_piece(row, col)
 
-    def move_Piece(self, row, col):
+    def move_piece(self, row, col):
         self.row, self.col = row, col
         self.board.move_piece(self, row, col)
 
