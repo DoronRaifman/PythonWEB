@@ -1,16 +1,13 @@
 from Lesson3.Chess.Enums import PieceColor, PieceType
-from Lesson3.Chess.Board import Board
-from Lesson3.Chess.Pieces import PiecePawn, PieceRook, PieceKnight, \
-    PieceBishop, PieceQueen, PieceKing
-
+import Lesson3.Chess.Board as brd
 
 class PieceBase:
-    def __init__(self, board: Board, row:int, col:int, piece_type:PieceType,
+    def __init__(self, board, row:int, col:int, piece_type:PieceType,
                  piece_color:PieceColor):
         self.row, self.col = row, col
         self.piece_type:PieceType = piece_type
         self.piece_color:PieceColor = piece_color
-        self.board:Board = board
+        self.board:brd.Board = board
 
     def __str__(self):
         return f'{self.piece_type.name}, {self.piece_color.name}'
@@ -38,9 +35,8 @@ class PieceBase:
     def get_piece(self, row, col):
         return self.board.get_piece(row, col)
 
-    def move_piece(self, row, col):
+    def set_piece_position(self, row, col):
         self.row, self.col = row, col
-        self.board.move_piece(self, row, col)
 
     """
     methods that must be implemented in the derived class
@@ -65,20 +61,22 @@ class PieceBase:
     Piece factory
     """
     @staticmethod
-    def piece_factory(board: Board, row:int, col:int,
+    def piece_factory(board, row:int, col:int,
                       piece_type:PieceType, piece_color:PieceColor):
+        import Lesson3.Chess.Pieces as pcs
+
         piece = None
         if piece_type == PieceType.Pawn:
-            piece = PiecePawn(board, row, col, piece_color)
+            piece = pcs.PiecePawn(board, row, col, piece_color)
         elif piece_type == PieceType.Rook:
-            piece = PieceRook(board, row, col, piece_color)
+            piece = pcs.PieceRook(board, row, col, piece_color)
         elif piece_type == PieceType.Knight:
-            piece = PieceKnight(board, row, col, piece_color)
+            piece = pcs.PieceKnight(board, row, col, piece_color)
         elif piece_type == PieceType.Bishop:
-            piece = PieceBishop(board, row, col, piece_color)
+            piece = pcs.PieceBishop(board, row, col, piece_color)
         elif piece_type == PieceType.Queen:
-            piece = PieceQueen(board, row, col, piece_color)
+            piece = pcs.PieceQueen(board, row, col, piece_color)
         elif piece_type == PieceType.King:
-            piece = PieceKing(board, row, col, piece_color)
+            piece = pcs.PieceKing(board, row, col, piece_color)
         return piece
 

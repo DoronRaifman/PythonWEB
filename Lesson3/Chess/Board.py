@@ -1,6 +1,6 @@
 import copy
 from Lesson3.Chess.Enums import PieceColor, PieceType
-from Lesson3.Chess.PieceBase import PieceBase
+import Lesson3.Chess.PieceBase as pb
 
 
 class Board:
@@ -11,15 +11,17 @@ class Board:
         self.killed_peaces_black = []
 
     def get_piece(self, row, col):
-        piece: PieceBase = self.board[(row, col)]
+        piece: pb.PieceBase = self.board[(row, col)]
         return piece
 
     def move_piece(self, peace, row, col):
-        peace: PieceBase = peace
+        peace: pb.PieceBase = peace
+        self.board[(peace.row, peace.col)] = None
+        peace.set_position(row, col)
         dest_piece = self.get_piece(row, col)
         if dest_piece is not None:
             dest_piece.board = None
-            if dest_piece.piece_color:
+            if dest_piece.piece_color == PieceColor.White:
                 self.killed_peaces_white.append(dest_piece)
             else:
                 self.killed_peaces_black.append(dest_piece)
@@ -37,16 +39,16 @@ class Board:
         ]
         for officer in board_officers_data:
             col, piece_type = officer
-            self.board[(1, col)] = PieceBase.piece_factory(
+            self.board[(1, col)] = pb.PieceBase.piece_factory(
                 self, 1, col, piece_type, PieceColor.White)
-            self.board[(8, col)] = PieceBase.piece_factory(
+            self.board[(8, col)] = pb.PieceBase.piece_factory(
                 self, 8, col, piece_type, PieceColor.White)
 
         pones_white = [(2, col, PieceType.Pawn, PieceColor.White) for col in range(1, 9)]
         pones_black = [(7, col, PieceType.Pawn, PieceColor.Black) for col in range(1, 9)]
         for pone in pones_white + pones_black:
             row, col, piece_type, piece_color = pone
-            self.board[(row, col)] = PieceBase.piece_factory(
+            self.board[(row, col)] = pb.PieceBase.piece_factory(
                 self, row, col, piece_type, piece_color)
 
     def get_board_copy(self):
