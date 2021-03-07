@@ -42,7 +42,7 @@ class Board:
             self.board[(1, col)] = pb.PieceBase.piece_factory(
                 self, 1, col, piece_type, PieceColor.White)
             self.board[(8, col)] = pb.PieceBase.piece_factory(
-                self, 8, col, piece_type, PieceColor.White)
+                self, 8, col, piece_type, PieceColor.Black)
 
         pones_white = [(2, col, PieceType.Pawn, PieceColor.White) for col in range(1, 9)]
         pones_black = [(7, col, PieceType.Pawn, PieceColor.Black) for col in range(1, 9)]
