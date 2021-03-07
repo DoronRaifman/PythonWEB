@@ -14,9 +14,5 @@ class MyClass:
 
 c1 = MyClass()
 c2 = MyClass()
-
-
 print(f'c1={c1}')
 print(f'c2={c2}')
-
-
