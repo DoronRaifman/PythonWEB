@@ -15,7 +15,7 @@ class ClassifyIris:
     def __init__(self):
         self.x_val = None
         self.y_val = None
-        self.iris_name_to_val = {'Iris-setosa': 1, 'Iris-versicolor': 2, 'Iris-virginica': 3}
+        self.iris_name_to_val = {'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2}
 
     def read_csv(self):
         file_name = os.path.join('Data', 'iris_data.csv')
@@ -39,7 +39,7 @@ class ClassifyIris:
         from sklearn import metrics
 
         model = LogisticRegression()
-        X_train, X_test, y_train, y_test = train_test_split(self.x_val, self.y_val, test_size=0.4, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(self.x_val, self.y_val, test_size=0.8, random_state=42)
         model.fit(X_train, y_train)
         y_predict = model.predict(X_test)
         score = 100.0 * metrics.accuracy_score(y_test, y_predict)
@@ -50,5 +50,4 @@ if __name__ == '__main__':
     classifier = ClassifyIris()
     classifier.x_val, classifier.y_val = classifier.read_csv()
     classifier.classify()
-
 
