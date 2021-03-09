@@ -21,17 +21,17 @@ class Worker:
         y_predict, score = best_model.predict(x, y)
         model_name = best_model.name
         print(f'Best model is {model_name}, score={score}')
-        self.Clustering(model_name, x, y, y_predict, score)
+        self.draw_clustering(model_name, x, y, y_predict, score)
         self.print_confusion_matrix(x, y, y_predict)
 
-    def Clustering(self, model_name, x, y, y_predict, score):
+    def draw_clustering(self, model_name, x, y, y_predict, score):
         fig = plt.figure(figsize=(18, 10))
         plt.suptitle(f"Best model is {model_name}, score={score} - Clustering", size=30)
         ax = Axes3D(fig)
 
         fields = [Fields.Pclass, Fields.Sex, Fields.Age]
         field_values = [x[:, field.value] for field in fields]
-        field_names = [field.name for field in fields]
+        field_names = [field.name if field != Fields.Sex else field.name+', female=0, male=1' for field in fields]
 
         ax.set_xlabel(field_names[0])
         ax.set_ylabel(field_names[1])
@@ -53,7 +53,8 @@ class Worker:
     def print_confusion_matrix(self, x, y, y_predict):
         from sklearn.metrics import confusion_matrix
         from sklearn.metrics import plot_confusion_matrix
-        mtx = confusion_matrix(y, y_predict)
+        mtx = np.array(confusion_matrix(y, y_predict))
+        mtx = np.round(mtx, 2)
 
         class_names = [class_result.name for class_result in ClassResult]
         disp = plot_confusion_matrix(self.best_model.model, x, y,
