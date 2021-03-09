@@ -13,7 +13,7 @@ class Worker:
         reader = DataReader(csv_file_name)
         x, y = reader.do_work(is_remove_bad=False)
         file_name = os.path.join('Data', 'best_model.sav')
-        best_model:ClassifierModel = pickle.load(open(file_name, 'rb'))
+        best_model: ClassifierModel = pickle.load(open(file_name, 'rb'))
         y_predict, score = best_model.predict(x, y)
         model_name = best_model.name
         print(f'Best model is {model_name}, score={score}')
