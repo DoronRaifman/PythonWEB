@@ -4,10 +4,23 @@ import numpy as np
 import pandas as pd
 
 
+class ClassResult(Enum):
+    Drowned = 0
+    Survived = 1
+
+
 class Sex(Enum):
     female = 0
     male = 1
     no_gender = 2
+
+
+class Fields(Enum):
+    Pclass = 0
+    Sex = 1
+    Age = 2
+    SibSp = 3
+    Parch = 4
 
 
 class DataReader:
