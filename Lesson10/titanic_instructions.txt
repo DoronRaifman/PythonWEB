@@ -1,0 +1,64 @@
+Titanic survival prediction
+In this part we will attempt to predict who survived on the Titanic.
+
+The data set we use has the following vairbales (features/attributes):
+Variable	Definition	Key/Values
+PassengerId	Index	integer
+Pclass	Ticket class	1=1st, 2=2nd, 3=3rd
+Name	Name of passenger	string
+Sex	Sex	male, female
+Age	Age in years	integer
+SibSp	# of siblings/spouses aboard	integer
+Parch	# of parents/children aboard	integer
+Ticket	Ticket number	string
+Fare	Ticket fare	float
+Cabin	Cabin number	a code
+Embarked	Port of Embarkation	C=Cherbourg, Q=Queenstown, S=Southampton
+Survived	Predicted varibale	0=No, 1=Yes
+
+Goal:
+
+This part of the project is a competetive one. The goal is to produce the best prediciton you can
+
+
+Methodogology
+
+So far you only know two methods for prediction: KNN and linear regression.
+However, this does not mean that there are only two possible prediction sets from which you can choose.
+Instead, there are various possibilities for you to consider.
+For example: if you use KNN, you will need to choose a good K value and choose a distance metric.
+In both cases (KNN and linear regression), you may want to choose which features to use
+(it could be that some features are not useful).
+Further, some features have missing values.
+You will need to decide how to handle this
+(for instance: drop rows with missing values, place an avergae value in those rows,
+or some other method of your choosing).
+Another matter to consider is handling non-numeric values.
+For example, sex is non-numeric.
+You may choose to drop non-numeric features, or you could convert them to numeric values
+(if such conversion makes sense).
+Also you will need to consider splitting the data into a training set and a test set so as to avoid tailoring
+ the solution (overfitting) to the data you have
+
+
+Model Output
+
+Your model needs to produce a prediciton for each data sample (row), which is 0 (did not survive) or 1 (survived).
+If you use linear regression your model's output is a real number.
+In such a case you will need to convert that into 0s and 1s.
+
+
+Scoring your model
+
+Your model performance will be assessed on test data that is not available to you.
+As mentioned above, this part of the project is a competition, where the goal is to achieve highest model accuracy
+
+
+Final Note
+
+This part of the project is open ended, in that you are not given small and specific tasks.
+However, you are already familiar with all the componenets needed to succeed.
+Specifically, reading data into pandas dataframe, dropping columns, dropping rows, changing value of features,
+ splitting data into train and test subsets,
+ performing KNN and linear regression using sklearn library, and using cross validation.
+So don't panic...
