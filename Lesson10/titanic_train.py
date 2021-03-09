@@ -36,28 +36,24 @@ class MainManager:
         from sklearn.tree import DecisionTreeClassifier
         from sklearn.naive_bayes import GaussianNB
         from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-        from sklearn.linear_model import SGDClassifier
-        from sklearn.linear_model import LogisticRegression
+        from sklearn.linear_model import LogisticRegression, LinearRegression
         from sklearn.neural_network import MLPClassifier
-        from sklearn.linear_model import LinearRegression
 
         classifiers = {
             'KNN': {'model': KNeighborsClassifier(n_neighbors=3)},
             'KNN Pipeline': {'model': Pipeline([('nca', NeighborhoodComponentsAnalysis(random_state=100)),
-                                      ('knn', KNeighborsClassifier(n_neighbors=3))])},
+                                                ('knn', KNeighborsClassifier(n_neighbors=3))])},
             'DecisionTree': {'model': DecisionTreeClassifier(random_state=0)},
             'RandomForest': {'model': RandomForestClassifier()},
             'Naive Base': {'model': GaussianNB()},
-            'sgd': {'model': SGDClassifier(loss="huber", penalty="elasticnet", max_iter=10000, tol=0.001)},
-            'logistic_regression': {
+            'logistic regression': {
                 'model': LogisticRegression(random_state=0, solver='newton-cg', multi_class='multinomial',
-                                                      max_iter=10000)},
+                                            max_iter=10000)},
             'linear regression': {'model': LinearRegression()},
-            'gradient_boosting': {'model':
-                                      GradientBoostingClassifier(n_estimators=100, learning_rate=1.0, max_depth=1,
-                                                            random_state=0)},
+            'gradient boosting': {'model':  GradientBoostingClassifier(n_estimators=100, learning_rate=1.0,
+                                                                       max_depth=1, random_state=0)},
             'MLP': {'model': MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15, ), random_state=1,
-                                 max_iter=10000)},
+                                           max_iter=10000)},
         }
         reader = DataReader(csv_file_name)
         # x_no_bad, y_no_bad = reader.do_work(is_remove_bad=True)
