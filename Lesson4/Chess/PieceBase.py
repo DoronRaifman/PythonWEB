@@ -8,15 +8,19 @@ class PieceBase:
         self.piece_type:PieceType = piece_type
         self.piece_color:PieceColor = piece_color
         self.board:brd.Board = board
+        self.is_can_skip_pieces = False
 
     def __str__(self):
-        return f'{self.piece_type.name}, {self.piece_color.name}'
+        return f'{self.piece_type.name}, {self.piece_color.name}, ({self.row}, {self.col})'
 
     def __repr__(self):
         return str(self)
 
     def set_position(self, row, col):
         self.row, self.col = row, col
+
+    def get_position(self):
+        return (self.row, self.col)
 
     def is_legal_position(self, row, col):
         return 1 <= row <= 8 and 1 <= col <= 8
@@ -35,9 +39,6 @@ class PieceBase:
     def get_piece(self, row, col):
         return self.board.get_piece(row, col)
 
-    def set_piece_position(self, row, col):
-        self.row, self.col = row, col
-
     """
     methods that must be implemented in the derived class
     """
@@ -48,14 +49,44 @@ class PieceBase:
         raise Exception("Don't call me")
 
     def get_all_theoretical_possible_moves(self):
-        # return all theoretical possible moves even if outside board.
+        # return all theoretical possible moves to all directions
         #   ignore existing pieces
-        # return list of tuples [(delta_row, delta_col), ]
-        # return [(0, 0)]
+        # return dict of list of tuples {1: [(row, col)]}
+        # return {1: [(0, 0)], 2:[(1, 0)]}
         raise Exception("Don't call me")
 
     def get_icon_name(self):
         raise Exception("Don't call me")
+
+    """
+    some possible moves building blocks
+    """
+    def get_all_strait_possible_moves(self):
+        possible_moves = {}
+        row, col = self.get_position()
+        possible_moves[1] = [(row, col) for row in range(row+1, 9)]
+        if row > 1:
+            moves = [(row, col) for row in range(1, row - 1)]
+            possible_moves[2] = moves[::-1]
+        possible_moves[3] = [(row, col) for col in range(col+1, 9)]
+        if col > 1:
+            moves = [(row, col) for col in range(1, col - 1)]
+            possible_moves[4] = moves[::-1]
+        return possible_moves
+
+    def get_all_diagonal_possible_moves(self):
+        possible_moves = {i: [] for i in range(5, 5+4+1)}
+        row, col = self.get_position()
+        for delta in range(1, 8):
+            if self.is_legal_position(row+delta, col+delta):
+                possible_moves[5].append((row+delta, col+delta))
+            if self.is_legal_position(row-delta, col-delta):
+                possible_moves[6].append((row-delta, col-delta))
+            if self.is_legal_position(row+delta, col-delta):
+                possible_moves[7].append((row+delta, col-delta))
+            if self.is_legal_position(row-delta, col+delta):
+                possible_moves[8].append((row-delta, col+delta))
+        return possible_moves
 
     """
     Piece factory

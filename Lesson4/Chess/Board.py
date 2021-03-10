@@ -31,7 +31,7 @@ class Board:
         # empty board
         self.board = {(row, col): None for row in range(1, 9) for col in range(1, 9)}
         board_officers_data = [
-            # officers (col, peace_type)
+            # officers (col, pieace_type)
             (1, PieceType.Rook), (8, PieceType.Rook),
             (2, PieceType.Knight), (7, PieceType.Knight),
             (3, PieceType.Bishop), (6, PieceType.Bishop),
@@ -52,9 +52,12 @@ class Board:
                 self, row, col, piece_type, piece_color)
 
     def get_board_copy(self):
-        new_board = copy.deepcopy(self)
-        for peace in self.board.values():
-            if peace is not None:
-                peace.board = new_board
+        new_board = Board()
+        for piece in self.board.values():
+            if piece is not None:
+                row, col = piece.row, piece.col
+                piece_new:pb.PieceBase = piece.copy()
+                piece_new.board = new_board
+                new_board.board[(row, col)] = piece_new
         return new_board
 
