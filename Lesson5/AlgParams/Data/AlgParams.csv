@@ -1,0 +1,42 @@
+project_id,param_name,value,description,operation,log
+-1,w_clean,2.0,None,0,None
+-1,wf,10.0,None,0,None
+-1,peak_threshold,5.0,None,0,None
+-1,thr_time_factor1,2.0,None,0,None
+-1,thr_time_factor2,5.0,None,0,None
+-1,max_delay_time,1.0,None,0,None
+-1,meanThresholdForBias,2.5,None,0,None
+-1,leak_count,4.0,None,0,None
+-1,final_leak_count,3.0,# of Pks,0,None
+-1,white_noise_threshold,10.0,None,0,None
+-1,noise_figure_threshold,5.0,None,0,None
+-1,cont_wind,50.0,None,0,None
+-1,cont_beta,4.0,None,0,None
+-1,days_back_count,14.0,# of Instances for Average,0,None
+-1,is_pilot,0.0,Pilot mode: open Leaks faster. 0-normal; 1-pilot; 2-simulation,0,None
+-1,LeakDistanceThresholdMeter,50.0,Min Distance between Leaks,0,bs 29.9.2020 20->50
+-1,LeakProbabilityThreshold,40.0,Min Probability to open a Leak (adaptive),0,dr 4/11/2020
+-1,sliced_intensity_thr_time_factor1,0.1,None,0,None
+-1,band_detection_threshold,1.5,None,0,None
+-1,band_samples_threshold,10.0,None,0,None
+-1,radio_quality_threshold,12.0,None,0,12.11.2020 BS 15->12
+-1,gps_radio_quality_threshold,7.0,None,0,None
+-1,g4threshold_a,80.0,Intensity level for A for G4 sensors,0,bs 2.3.2021 X2 for Prod4
+-1,g4threshold_b,25.0,Intensity level for B for G4 sensors,0,bs 2.3.2021 X2 for Prod4
+-1,g4delta_a,10.0,hysteresis for A->B,0,bs 2.3.2021 X2 for Prod4
+-1,g4delta_b,5.0,hysteresis for B->C,0,bs 2.3.2021 X2 for Prod4
+-1,g5threshold_a,80.0,Intensity level for A for G5 sensors,0,bs 2.3.2021 X2 for Prod4
+-1,g5threshold_b,25.0,Intensity level for B for G5 sensors,0,bs 2.3.2021 X2 for Prod4
+-1,g5delta_a,10.0,hysteresis for A->B,0,bs 2.3.2021 X2 for Prod4
+-1,g5delta_b,5.0,hysteresis for B->C,0,bs 2.3.2021 X2 for Prod4
+-1,prob_band_narrow_band_factor_high,0.6,Band_highS factor for Prob for Narrow-band materials,0,None
+-1,LeakProbabilityCloseFactor,0.7,Leak auto-closure Ratio for hysteresis ,0,None
+-1,dominant_peak_ratio_power,1.5,Power of Dominant peak Contrast, for Prob,0,None
+-1,bias2_sigm_thr_low,2.5,bias2 sigmoid threshold low,0,None
+-1,bias2_sigm_thr_high,5.0,bias2 sigmoid threshold high,0,None
+-1,Fmin,1.0,Min freq to consider as in Average,0,bs 19/11/2020 - added
+242,Fmin,220.0,Min freq for PD40,1,bs 1/12/2020
+305,Fmin,220.0,Min Freq for PD20,1,bs 1/12/2020
+270,Fmin,220.0,Min Freq for Harrisburg,1,bs 1/12/2020
+-1,intensity_proj_factor,1.0,Linear intensity Factor Av/Isn,0,bs 25.2.2021 1->0.5; bs 2.3.2021 0.5->1
+-1,intensity_attenuation,1.0,power2 intensity factor,0,bs 9/12/2020

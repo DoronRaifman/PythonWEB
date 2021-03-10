@@ -1,0 +1,30 @@
+couple_calc_type,material_id,project_id,param_name,value,description,operation,log
+-1,-1,-1,bias_low,0.2,in Prob: 1-X,0,9.9.2020 DS changed from 0.2
+-1,-1,-1,bias_high,0.6,in Prob: 1-X,0,dr 05/11/20 changed 0.5->0.6
+-1,-1,-1,bias_low_factor,1.0,None,0,None
+-1,-1,-1,bias_high_factor,1.0,None,0,None
+-1,-1,-1,bands_low,2.0,None,0,None
+-1,-1,-1,bands_high,6.0,None,0,None
+-1,-1,-1,bands_low_factor,1.0,None,0,None
+-1,-1,-1,bands_high_factor,1.0,None,0,None
+2,-1,-1,bands_low,-2.0,Hydro ,1,None
+-1,2,-1,bands_low,1.0,PVC narrow band material,1,None
+-1,14,-1,bands_low,1.0,MDPE narrow band material,1,None
+-1,6,-1,bands_low,1.0,LargeDiameter narrow band material,1,None
+-1,4,-1,bands_low,1.0,PE narrow band material,1,None
+-1,11,-1,bands_low,1.0,DI narrow band material,1,None
+-1,7,-1,bands_low,1.0,CI narrow band material,1,None
+-1,2,-1,bands_high,1.8,PVC narrow band material,1,12.11.2020 BS changed 3->1.8
+-1,14,-1,bands_high,1.8,MDPE narrow band material,1,12.11.2020 BS changed 3->1.8
+-1,6,-1,bands_high,1.8,LargeMaterial narrow band material,1,12.11.2020 BS changed 3->1.8
+-1,4,-1,bands_high,1.8,PE narrow band material,1,12.11.2020 BS changed 3->1.8
+-1,11,-1,bands_high,1.8,DI narrow band material,1,12.11.2020 BS changed 3->1.8
+-1,7,-1,bands_high,1.8,CI narrow band material,1,12.11.2020 BS changed 3->1.812.11.2020 BS changed 3->1.8
+-1,-1,204,bands_high,4.0,MeiShikma narrow band,1,15.2.2021 bs
+-1,-1,204,bands_low,1.0,MeiShikma narrow band,1,15.2.2021
+-1,-1,242,bias_low,0.3,PD40,1,21.9.2020 DS bias NR 0.5->0.3
+-1,-1,242,bias_high,0.6,PD40,1,21.9.2020 DS bias NR 1->0.6
+-1,-1,305,bias_low,0.3,PD20,1,21.9.2020 DS bias NR 0.5->0.3
+-1,-1,305,bias_high,0.6,PD20,1,21.9.2020 DS bias NR 1->0.6
+-1,-1,270,bias_low,0.3,Harrisburg,1,21.9.2020 DS bias NR 0.5->0.3
+-1,-1,270,bias_high,0.6,Harrisburg,1,21.9.2020 DS bias NR 1->0.6

@@ -1,4 +1,4 @@
-from Lesson3.Chess.Board import Board
+from Lesson4.Chess.Board import Board
 
 
 def print_board(board):

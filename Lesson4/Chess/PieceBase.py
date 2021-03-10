@@ -1,5 +1,5 @@
-from Lesson3.Chess.Enums import PieceColor, PieceType
-import Lesson3.Chess.Board as brd
+from Lesson4.Chess.Enums import PieceColor, PieceType
+import Lesson4.Chess.Board as brd
 
 class PieceBase:
     def __init__(self, board, row:int, col:int, piece_type:PieceType,
@@ -63,7 +63,7 @@ class PieceBase:
     @staticmethod
     def piece_factory(board, row:int, col:int,
                       piece_type:PieceType, piece_color:PieceColor):
-        import Lesson3.Chess.Pieces as pcs
+        import Lesson4.Chess.Pieces as pcs
 
         piece = None
         if piece_type == PieceType.Pawn:
