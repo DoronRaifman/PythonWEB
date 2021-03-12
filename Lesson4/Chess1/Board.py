@@ -1,6 +1,6 @@
 import copy
-from Lesson4.Chess.Enums import PieceColor, PieceType
-import Lesson4.Chess.PieceBase as pb
+from Lesson4.Chess1.Enums import PieceColor, PieceType
+import Lesson4.Chess1.PieceBase as pb
 
 
 class Board:
@@ -56,7 +56,7 @@ class Board:
         for piece in self.board.values():
             if piece is not None:
                 row, col = piece.row, piece.col
-                piece_new:pb.PieceBase = piece.copy()
+                piece_new: pb.PieceBase = copy.copy(piece)
                 piece_new.board = new_board
                 new_board.board[(row, col)] = piece_new
         return new_board

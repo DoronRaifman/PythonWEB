@@ -1,5 +1,5 @@
-from Lesson4.Chess.Enums import PieceColor, PieceType
-from Lesson4.Chess.PieceBase import PieceBase
+from Lesson4.Chess2.Enums import PieceColor, PieceType
+from Lesson4.Chess2.PieceBase import PieceBase
 
 
 class PiecePawn(PieceBase):
@@ -13,6 +13,7 @@ class PieceRook(PieceBase):
 
     def get_all_theoretical_possible_moves(self):
         return self.get_all_strait_possible_moves()
+
 
 class PieceKnight(PieceBase):
     def __init__(self, board, row: int, col: int, piece_color: PieceColor):

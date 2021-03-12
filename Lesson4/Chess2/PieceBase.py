@@ -1,5 +1,6 @@
-from Lesson4.Chess.Enums import PieceColor, PieceType
-import Lesson4.Chess.Board as brd
+from Lesson4.Chess2.Enums import PieceColor, PieceType
+import Lesson4.Chess2.Board as brd
+
 
 class PieceBase:
     def __init__(self, board, row:int, col:int, piece_type:PieceType,
@@ -11,10 +12,10 @@ class PieceBase:
         self.is_can_skip_pieces = False
 
     def __str__(self):
-        return f'{self.piece_type.name}, {self.piece_color.name}, ({self.row}, {self.col})'
+        return f'{self.piece_type.name}, {self.piece_color.name}'
 
     def __repr__(self):
-        return str(self)
+        return f'{self.piece_type.name}, {self.piece_color.name}, ({self.row}, {self.col})'
 
     def set_position(self, row, col):
         self.row, self.col = row, col
@@ -94,7 +95,7 @@ class PieceBase:
     @staticmethod
     def piece_factory(board, row:int, col:int,
                       piece_type:PieceType, piece_color:PieceColor):
-        import Lesson4.Chess.Pieces as pcs
+        import Lesson4.Chess2.Pieces as pcs
 
         piece = None
         if piece_type == PieceType.Pawn:

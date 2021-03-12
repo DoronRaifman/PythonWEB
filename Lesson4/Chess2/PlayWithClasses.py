@@ -1,4 +1,4 @@
-from Lesson4.Chess.Board import Board
+from Lesson4.Chess2.Board import Board
 
 
 def print_board(board):
@@ -14,18 +14,18 @@ def print_board(board):
         line = f'row {row}: '
         for col in col_keys_sorted:
             piece = row_dict[col]
-            line += f'{col}:{piece}, '
+            line += f'{col}:{str(piece)}, '
         print(f'{line[:-2]}')
 
+
 def print_moves(piece, moves):
-    print(piece)
+    print(repr(piece))
     for direction, move_positions in moves.items():
         line = f'direction {direction}: '
         for position in move_positions:
             row, col = position
             line += f'({row}, {col}),'
         print(line)
-
 
 
 if __name__ == '__main__':
