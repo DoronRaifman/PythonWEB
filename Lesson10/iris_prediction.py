@@ -1,6 +1,11 @@
 import os
 from enum import Enum
 import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import plot_confusion_matrix
+import matplotlib.pyplot as plt
 
 
 class Fields(Enum):
@@ -16,6 +21,7 @@ class ClassifyIris:
         self.x_val = None
         self.y_val = None
         self.iris_name_to_val = {'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2}
+        self.class_names = list(self.iris_name_to_val.keys())
 
     def read_csv(self):
         file_name = os.path.join('Data', 'iris_data.csv')
@@ -33,10 +39,8 @@ class ClassifyIris:
         x_val, y_val = np.array(x), np.array(y)
         return x_val, y_val
 
-    def classify(self):
+    def classify_logistic_regression(self):
         from sklearn.linear_model import LogisticRegression
-        from sklearn.model_selection import train_test_split
-        from sklearn import metrics
 
         model = LogisticRegression()
         X_train, X_test, y_train, y_test = train_test_split(self.x_val, self.y_val, test_size=0.8, random_state=42)
@@ -44,10 +48,43 @@ class ClassifyIris:
         y_predict = model.predict(X_test)
         score = 100.0 * metrics.accuracy_score(y_test, y_predict)
         print(f'result: {score:.1f}')
+        self.print_confusion_matrix(model, X_test, y_test, y_predict)
+
+    def classify_linear_regression(self):
+        from sklearn.linear_model import LinearRegression
+
+        model = LinearRegression()
+        X_train, X_test, y_train, y_test = train_test_split(self.x_val, self.y_val, test_size=0.8, random_state=42)
+        model.fit(X_train, y_train)
+        y_predict = model.predict(X_test)
+        y_predict_round = np.round(y_predict, 0)
+        score = 100.0 * metrics.accuracy_score(y_test, y_predict_round)
+        print(f'result: {score:.1f}')
+        mtx = np.array(confusion_matrix(y_test, y_predict_round))
+        mtx = np.round(mtx, 2)
+        print('confusion matrix')
+        print(mtx)
+
+    def print_confusion_matrix(self, model, X_test, y_test, y_predict):
+        mtx = np.array(confusion_matrix(y_test, y_predict))
+        mtx = np.round(mtx, 2)
+        print('confusion matrix')
+        print(mtx)
+        disp = plot_confusion_matrix(model, X_test, y_test,
+                                     display_labels=self.class_names,
+                                     cmap=plt.cm.Blues,
+                                     normalize='true')
+        disp.ax_.set_title('confusion matrix')
+
+
+        plt.show()
 
 
 if __name__ == '__main__':
     classifier = ClassifyIris()
     classifier.x_val, classifier.y_val = classifier.read_csv()
-    classifier.classify()
+    print('logistic regression')
+    classifier.classify_logistic_regression()
+    print('linear regression')
+    classifier.classify_linear_regression()
 
