@@ -1,3 +1,4 @@
+pandas==1.2.3
 Flask==1.0.2
 Jinja2==2.10.1
 numpy==1.17.4
@@ -8,6 +9,5 @@ pypyodbc==1.3.2
 pymongo==3.11.0
 Pillow==8.0.1
 openpyxl==3.0.6
-pandas==1.2.3
 scikit-learn==0.24.1
 
