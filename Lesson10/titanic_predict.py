@@ -3,7 +3,6 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-
 from Lesson10.titanic_reader import DataReader, Fields, ClassResult
 from Lesson10.titanic_train import ClassifierModel
 
@@ -26,17 +25,16 @@ class Worker:
 
     def draw_clustering(self, model_name, x, y, y_predict, score):
         fig = plt.figure(figsize=(18, 10))
-        plt.suptitle(f"Best model is {model_name}, score={score} - Clustering", size=30)
+        plt.suptitle(f"Best model is {model_name}, score={score}"
+                     f" - Clustering", size=30)
         ax = Axes3D(fig)
-
         fields = [Fields.Pclass, Fields.Sex, Fields.Age]
         field_values = [x[:, field.value] for field in fields]
-        field_names = [field.name if field != Fields.Sex else field.name+', female=0, male=1' for field in fields]
-
+        field_names = [field.name if field != Fields.Sex else
+                       field.name+', female=0, male=1' for field in fields]
         ax.set_xlabel(field_names[0])
         ax.set_ylabel(field_names[1])
         ax.set_zlabel(field_names[2])
-
         ax.scatter(np.extract(y_predict == ClassResult.Drowned.value, field_values[0]),
                    np.extract(y_predict == ClassResult.Drowned.value, field_values[1]),
                    np.extract(y_predict == ClassResult.Drowned.value, field_values[2]),
@@ -45,7 +43,6 @@ class Worker:
                    np.extract(y_predict == ClassResult.Survived.value, field_values[1]),
                    np.extract(y_predict == ClassResult.Survived.value, field_values[2]),
                    color='blue', marker='x', s=40, label='Survived')
-
         plt.legend(loc='lower left')
         plt.show()
         plt.close(fig)

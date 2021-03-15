@@ -2,10 +2,8 @@ import os
 from enum import Enum
 import numpy as np
 import pickle
-
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
-
 from Lesson10.titanic_reader import DataReader
 
 
@@ -41,24 +39,28 @@ class MainManager:
 
         classifiers = {
             'KNN': {'model': KNeighborsClassifier(n_neighbors=3)},
-            'KNN Pipeline': {'model': Pipeline([('nca', NeighborhoodComponentsAnalysis(random_state=100)),
-                                                ('knn', KNeighborsClassifier(n_neighbors=3))])},
+            'KNN Pipeline': {
+                'model': Pipeline([
+                    ('nca', NeighborhoodComponentsAnalysis(random_state=100)),
+                    ('knn', KNeighborsClassifier(n_neighbors=3))])},
             'DecisionTree': {'model': DecisionTreeClassifier(random_state=0)},
             'RandomForest': {'model': RandomForestClassifier()},
             'Naive Base': {'model': GaussianNB()},
             'logistic regression': {
-                'model': LogisticRegression(random_state=0, solver='newton-cg', multi_class='multinomial',
-                                            max_iter=10000)},
+                'model': LogisticRegression(random_state=0, solver='newton-cg',
+                                            multi_class='multinomial', max_iter=10000)},
             'linear regression': {'model': LinearRegression()},
-            'gradient boosting': {'model':  GradientBoostingClassifier(n_estimators=100, learning_rate=1.0,
-                                                                       max_depth=1, random_state=0)},
-            'MLP': {'model': MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15, ), random_state=1,
+            'gradient boosting': {'model':  GradientBoostingClassifier(
+                n_estimators=100, learning_rate=1.0, max_depth=1, random_state=0)},
+            'MLP': {'model': MLPClassifier(
+                solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(15, ), random_state=1,
                                            max_iter=10000)},
         }
         reader = DataReader(csv_file_name)
         # x_no_bad, y_no_bad = reader.do_work(is_remove_bad=True)
         x_all, y_all = reader.do_work(is_remove_bad=False)
-        # X_train, X_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.8, random_state=0)
+        # X_train, X_test, y_train, y_test = train_test_split(
+        #       x_all, y_all, test_size=0.8, random_state=0)
         names = list(classifiers.keys())
         for name in names:
             classifier_data = classifiers[name]
@@ -73,8 +75,11 @@ class MainManager:
             classifier_data['classifier_model'] = classifier_model
 
         # order by score descending
-        classifiers_list = [(name, classifiers[name]['score']) for name in classifiers.keys()]
-        sorted_classifiers = sorted(classifiers_list, key=lambda tup:tup[1], reverse=True)
+        classifiers_list = [
+            (name, classifiers[name]['score'])
+            for name in classifiers.keys()]
+        sorted_classifiers = sorted(
+            classifiers_list, key=lambda tup:tup[1], reverse=True)
         for item in sorted_classifiers:
             name, score = item
             classifier_data = classifiers[name]

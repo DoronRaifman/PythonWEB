@@ -44,7 +44,8 @@ class DataReader:
         return data
 
     def remove_unwanted_features(self, data:pd.DataFrame):
-        droped_data = data.drop(columns=['PassengerId', 'Name', 'Ticket', 'Fare', 'Cabin', 'Embarked'])
+        droped_data = data.drop(columns=[
+            'PassengerId', 'Name', 'Ticket', 'Fare', 'Cabin', 'Embarked'])
         return droped_data
 
     def fix_simple_values(self, data:pd.DataFrame, is_remove_bad):

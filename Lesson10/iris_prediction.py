@@ -20,30 +20,35 @@ class ClassifyIris:
     def __init__(self):
         self.x_val = None
         self.y_val = None
-        self.iris_name_to_val = {'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2}
+        self.iris_name_to_val = {
+            'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2
+        }
         self.class_names = list(self.iris_name_to_val.keys())
 
     def read_csv(self):
         file_name = os.path.join('Data', 'iris_data.csv')
-        x, y = [], []
+        x_list, y_list = [], []
         x_val_count = 4
         with open(file_name, 'rt') as fdes:
             lines = fdes.readlines()
             for line in lines[1:]:
                 row_values = line[:-1].split(sep=',')
-                values = [float(row_values[i]) for i in range(x_val_count)]
+                values = [
+                    float(row_values[i])
+                    for i in range(x_val_count)]
                 class_name = row_values[Fields.class_id.value]
                 y_val = self.iris_name_to_val[class_name]
-                x.append(values)
-                y.append(y_val)
-        x_val, y_val = np.array(x), np.array(y)
-        return x_val, y_val
+                x_list.append(values)
+                y_list.append(y_val)
+        X, y = np.array(x_list), np.array(y_list)
+        return X, y
 
     def classify_logistic_regression(self):
         from sklearn.linear_model import LogisticRegression
 
         model = LogisticRegression()
-        X_train, X_test, y_train, y_test = train_test_split(self.x_val, self.y_val, test_size=0.8, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(
+            self.x_val, self.y_val, test_size=0.8, random_state=42)
         model.fit(X_train, y_train)
         y_predict = model.predict(X_test)
         score = 100.0 * metrics.accuracy_score(y_test, y_predict)
@@ -65,18 +70,17 @@ class ClassifyIris:
         print('confusion matrix')
         print(mtx)
 
-    def print_confusion_matrix(self, model, X_test, y_test, y_predict):
+    def print_confusion_matrix(
+            self, model, X_test, y_test, y_predict):
         mtx = np.array(confusion_matrix(y_test, y_predict))
         mtx = np.round(mtx, 2)
         print('confusion matrix')
         print(mtx)
-        disp = plot_confusion_matrix(model, X_test, y_test,
-                                     display_labels=self.class_names,
-                                     cmap=plt.cm.Blues,
-                                     normalize='true')
+        disp = plot_confusion_matrix(
+            model, X_test, y_test,
+            display_labels=self.class_names,
+            cmap=plt.cm.Blues, normalize='true')
         disp.ax_.set_title('confusion matrix')
-
-
         plt.show()
 
 
