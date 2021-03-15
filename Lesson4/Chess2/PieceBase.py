@@ -96,19 +96,10 @@ class PieceBase:
     def piece_factory(board, row:int, col:int,
                       piece_type:PieceType, piece_color:PieceColor):
         import Lesson4.Chess2.Pieces as pcs
-
-        piece = None
-        if piece_type == PieceType.Pawn:
-            piece = pcs.PiecePawn(board, row, col, piece_color)
-        elif piece_type == PieceType.Rook:
-            piece = pcs.PieceRook(board, row, col, piece_color)
-        elif piece_type == PieceType.Knight:
-            piece = pcs.PieceKnight(board, row, col, piece_color)
-        elif piece_type == PieceType.Bishop:
-            piece = pcs.PieceBishop(board, row, col, piece_color)
-        elif piece_type == PieceType.Queen:
-            piece = pcs.PieceQueen(board, row, col, piece_color)
-        elif piece_type == PieceType.King:
-            piece = pcs.PieceKing(board, row, col, piece_color)
+        piece_classes = {
+            PieceType.Pawn: pcs.PiecePawn, PieceType.Rook: pcs.PieceRook, PieceType.Knight: pcs.PieceKnight,
+            PieceType.Bishop: pcs.PieceBishop, PieceType.Queen: pcs.PieceQueen, PieceType.King: pcs.PieceKing
+        }
+        piece = piece_classes[piece_type](board, row, col, piece_color)
         return piece
 

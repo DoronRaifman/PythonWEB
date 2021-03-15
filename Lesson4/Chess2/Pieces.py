@@ -21,13 +21,15 @@ class PieceKnight(PieceBase):
         self.is_can_skip_pieces = True
 
     def get_all_theoretical_possible_moves(self):
-        deltas = [(2, -1), (2, 1), (-2, -1), (-2, 1), (1, 2), (-1, 2), (1, -2), (-1, -2)]
-        possible_moves = {1: []}
+        # deltas = [(2, -1), (2, 1), (-2, -1), (-2, 1), (1, 2), (-1, 2), (1, -2), (-1, -2)]
+        values1, values2 = [1, -1], [2, -2]
+        deltas = [(i, j) for i in values2 for j in values1] + [(j, i) for i in values2 for j in values1]
+        possible_moves = {}
         row, col = self.get_position()
-        for delta in deltas:
+        for i, delta in enumerate(deltas):
             delta_row, delta_col = delta
             if self.is_legal_position(row + delta_row, col + delta_col):
-                possible_moves[1].append((row + delta_row, col + delta_col))
+                possible_moves[i] = (row + delta_row, col + delta_col)
         return  possible_moves
 
 
@@ -56,13 +58,15 @@ class PieceKing(PieceBase):
         super().__init__(board, row, col, PieceType.King, piece_color)
 
     def get_all_theoretical_possible_moves(self):
-        deltas = [(1, -1), (1, 1), (-1, -1), (-1, 1), (1, 0), (-1, 0), (0, -1), (0, 1)]
-        possible_moves = {1: []}
+        # deltas = [(1, -1), (1, 1), (-1, -1), (-1, 1), (1, 0), (-1, 0), (0, -1), (0, 1)]
+        values = [1, -1]
+        deltas = [(i, j) for i in values for j in values] + [(i, 0) for i in values] + [(0, i) for i in values]
+        possible_moves = {}
         row, col = self.get_position()
-        for delta in deltas:
+        for i, delta in enumerate(deltas):
             delta_row, delta_col = delta
             if self.is_legal_position(row + delta_row, col + delta_col):
-                possible_moves[1].append((row + delta_row, col + delta_col))
+                possible_moves[i] = (row + delta_row, col + delta_col)
         return  possible_moves
 
 
