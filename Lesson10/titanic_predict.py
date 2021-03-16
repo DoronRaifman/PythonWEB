@@ -24,7 +24,7 @@ class Worker:
         self.print_confusion_matrix(x, y, y_predict)
 
     def draw_clustering(self, model_name, x, y, y_predict, score):
-        fig = plt.figure(figsize=(18, 10))
+        fig = plt.figure()
         plt.suptitle(f"Best model is {model_name}, score={score}"
                      f" - Clustering", size=30)
         ax = Axes3D(fig)

@@ -24,6 +24,7 @@ class ClassifyIris:
             'Iris-setosa': 0, 'Iris-versicolor': 1, 'Iris-virginica': 2
         }
         self.class_names = list(self.iris_name_to_val.keys())
+        self.class_values = list(self.iris_name_to_val.values())
 
     def read_csv(self):
         file_name = os.path.join('Data', 'iris_data.csv')
@@ -57,9 +58,9 @@ class ClassifyIris:
 
     def classify_linear_regression(self):
         from sklearn.linear_model import LinearRegression
-
         model = LinearRegression()
-        X_train, X_test, y_train, y_test = train_test_split(self.x_val, self.y_val, test_size=0.8, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(
+            self.x_val, self.y_val, test_size=0.8, random_state=42)
         model.fit(X_train, y_train)
         y_predict = model.predict(X_test)
         y_predict_round = np.round(y_predict, 0)
@@ -69,6 +70,27 @@ class ClassifyIris:
         mtx = np.round(mtx, 2)
         print('confusion matrix')
         print(mtx)
+        self.draw_lin_regr_results(y_predict, y_predict_round, y_test)
+
+    def draw_lin_regr_results(self, y_predict, y_predict_round, y_test):
+        print('Results graph')
+        fig = plt.figure(figsize=(18, 10))
+        plt.suptitle(f"Linear regression results", size=30)
+        plt.xlabel('true result', size=20)
+        plt.ylabel('predicted result', size=20)
+        hit = np.where(y_predict_round == y_test)
+        miss = np.where(y_predict_round != y_test)
+        plt.scatter(y_test[hit], y_predict[hit], color='green',
+                    marker='+', s=40, label='Match')
+        plt.scatter(y_test[miss], y_predict[miss], color='red',
+                    marker='x', s=40, label='Not Match')
+        for true_value in self.class_values:
+            x = np.linspace(start=true_value-0.2, stop=true_value+0.2)
+            y = np.full(x.size, true_value)
+            plt.plot(x, y, '--', color='magenta')
+        plt.legend()
+        plt.show()
+        plt.close(fig)
 
     def print_confusion_matrix(
             self, model, X_test, y_test, y_predict):
