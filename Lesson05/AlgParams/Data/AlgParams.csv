@@ -31,7 +31,7 @@ project_id,param_name,value,description,operation,log
 -1,g5delta_b,5.0,hysteresis for B->C,0,bs 2.3.2021 X2 for Prod4
 -1,prob_band_narrow_band_factor_high,0.6,Band_highS factor for Prob for Narrow-band materials,0,None
 -1,LeakProbabilityCloseFactor,0.7,Leak auto-closure Ratio for hysteresis ,0,None
--1,dominant_peak_ratio_power,1.5,Power of Dominant peak Contrast, for Prob,0,None
+-1,dominant_peak_ratio_power,1.5,Power of Dominant peak Contrast; for Prob,0,None
 -1,bias2_sigm_thr_low,2.5,bias2 sigmoid threshold low,0,None
 -1,bias2_sigm_thr_high,5.0,bias2 sigmoid threshold high,0,None
 -1,Fmin,1.0,Min freq to consider as in Average,0,bs 19/11/2020 - added
