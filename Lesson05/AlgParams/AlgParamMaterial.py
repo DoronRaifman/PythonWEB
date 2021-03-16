@@ -6,7 +6,6 @@ from Lesson05.AlgParams.Enums import SensorType, PipeMaterialType
 class AlgParamsMaterial(AlgParamBase):
     def __init__(self):
         super().__init__()
-        self.alg_params_data = None
         self.alg_params = None
 
     def read_alg_params(self, couple_calc_type: SensorType = SensorType.Any,

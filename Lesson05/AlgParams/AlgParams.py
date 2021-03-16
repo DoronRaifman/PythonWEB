@@ -5,7 +5,6 @@ from Lesson05.AlgParams.AlgParamsBase import AlgParamBase
 class AlgParams(AlgParamBase):
     def __init__(self):
         super().__init__()
-        self.alg_params_data = None
         self.alg_params = None
 
     def read_alg_params(self, project_id=-1):

@@ -8,6 +8,7 @@ class AlgParamBase:
         self.alg_params_rows = None
         self.param_names = None
         self.alg_params_raw = None
+        self.alg_params_data = None
 
     def _read_alg_params_from_file(self, file_name):
         file_name = os.path.join('Data', file_name)
@@ -59,4 +60,3 @@ class AlgParamBase:
         for param_name in sorted_names:
             value = alg_params[param_name]
             print(f'\t{param_name}: {value}')
-
