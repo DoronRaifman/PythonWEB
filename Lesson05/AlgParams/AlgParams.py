@@ -1,6 +1,5 @@
 import os
 from Lesson05.AlgParams.AlgParamsBase import AlgParamBase
-# from Lesson05.AlgParams.Enums import SensorType, PipeMaterialType, AlgParamOperationType
 
 
 class AlgParams(AlgParamBase):
