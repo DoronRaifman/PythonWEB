@@ -1,10 +1,45 @@
+import os
 
 from Lesson05.AlgParams.Enums import AlgParamOperationType
 
 
 class AlgParamBase:
     def __init__(self):
-        pass
+        self.alg_params_rows = None
+        self.param_names = None
+        self.alg_params_raw = None
+
+    def _read_alg_params_from_file(self, file_name):
+        file_name = os.path.join('Data', file_name)
+        self.alg_params_rows = []
+        with open(file_name, 'rt') as fdes:
+            lines = fdes.readlines()
+            header_line = lines[0]
+            self.param_names = header_line[:-1].split(sep=',')
+            for line in lines[1:]:
+                row_values = line[:-1].split(sep=',')
+                row = {param_name: row_values[i] for i, param_name in enumerate(self.param_names)}
+                int_fields = ['project_id', 'operation', 'couple_calc_type', 'material_id']
+                float_fields = ['value']
+                for field_name in int_fields:
+                    if field_name in row:
+                        row[field_name] = int(row[field_name])
+                for field_name in float_fields:
+                    if field_name in row:
+                        row[field_name] = float(row[field_name])
+                self.alg_params_rows.append(row)
+
+    def _make_simple(self):
+        alg_params = {}
+        for key, row in self.alg_params_raw.items():
+            is_default = True
+            for val in key[:-1]:
+                if val != -1:
+                    is_default = False
+                    break
+            if is_default:
+                alg_params[key[-1]] = row['value']
+        return alg_params
 
     @staticmethod
     def _handle_override(params, params_override):
