@@ -1,6 +1,6 @@
 import copy
-from Lesson4.Chess1.Enums import PieceColor, PieceType
-import Lesson4.Chess1.PieceBase as pb
+from Lesson04.Chess1.Enums import PieceColor, PieceType
+import Lesson04.Chess1.PieceBase as pb
 
 
 class Board:

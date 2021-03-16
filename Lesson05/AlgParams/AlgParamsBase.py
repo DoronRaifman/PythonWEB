@@ -1,5 +1,5 @@
 
-from Lesson5.AlgParams.Enums import AlgParamOperationType
+from Lesson05.AlgParams.Enums import AlgParamOperationType
 
 
 class AlgParamBase:

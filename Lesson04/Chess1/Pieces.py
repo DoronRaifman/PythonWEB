@@ -1,5 +1,5 @@
-from Lesson4.Chess1.Enums import PieceColor, PieceType
-from Lesson4.Chess1.PieceBase import PieceBase
+from Lesson04.Chess1.Enums import PieceColor, PieceType
+from Lesson04.Chess1.PieceBase import PieceBase
 
 
 class PiecePawn(PieceBase):
