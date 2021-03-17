@@ -1,4 +1,3 @@
-import os
 from Lesson05.AlgParams.AlgParamsBase import AlgParamBase
 from Lesson05.AlgParams.Enums import SensorType, PipeMaterialType
 
@@ -8,8 +7,10 @@ class AlgParamsMaterial(AlgParamBase):
         super().__init__()
         self.alg_params = None
 
-    def read_alg_params(self, couple_calc_type: SensorType = SensorType.Any,
-                        material_id: PipeMaterialType= PipeMaterialType.Any, project_id: int=-1):
+    def read_alg_params(self,
+                        couple_calc_type: SensorType = SensorType.Any,
+                        material_id: PipeMaterialType= PipeMaterialType.Any,
+                        project_id: int=-1):
         if self.alg_params_raw is None:
             self._read_alg_params_from_file_pandas('AlgParamsMaterials.csv')
         self.alg_params = self._make_simple()
@@ -20,12 +21,14 @@ class AlgParamsMaterial(AlgParamBase):
             params_override = self.alg_params_data[(-1, material_id, -1)]
             self._handle_override(self.alg_params, params_override)
         if couple_calc_type.value != -1 and material_id.value != -1:
-            params_override = self.alg_params_data[(couple_calc_type, material_id, -1)]
+            params_override = self.alg_params_data[
+                (couple_calc_type, material_id, -1)]
             self._handle_override(self.alg_params, params_override)
         if project_id != -1:
             params_override = self.alg_params_data[(-1, -1, project_id)]
             self._handle_override(self.alg_params, params_override)
-            params_override = self.alg_params_data[(couple_calc_type.value, material_id.value, project_id)]
+            params_override = self.alg_params_data[
+                (couple_calc_type.value, material_id.value, project_id)]
             self._handle_override(self.alg_params, params_override)
         return self.alg_params
 
@@ -38,7 +41,9 @@ class AlgParamsMaterial(AlgParamBase):
             project_id = row['project_id']
             param_name = row['param_name']
             key = (couple_calc_type, material_id, project_id)
-            self.alg_params_raw[(couple_calc_type, material_id, project_id, param_name)] = row
+            self.alg_params_raw[
+                (couple_calc_type, material_id, project_id, param_name)
+            ] = row
             if key not in self.alg_params_data:
                 self.alg_params_data[key] = {}
             self.alg_params_data[key][param_name] = row

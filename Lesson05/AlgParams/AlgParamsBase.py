@@ -26,8 +26,11 @@ class AlgParamBase:
             self.param_names = header_line[:-1].split(sep=',')
             for line in lines[1:]:
                 row_values = line[:-1].split(sep=',')
-                row = {param_name: row_values[i] for i, param_name in enumerate(self.param_names)}
-                int_fields = ['project_id', 'operation', 'couple_calc_type', 'material_id']
+                row = {param_name: row_values[i]
+                       for i, param_name in enumerate(self.param_names)}
+                int_fields = [
+                    'project_id', 'operation', 'couple_calc_type',
+                    'material_id']
                 float_fields = ['value']
                 for field_name in int_fields:
                     if field_name in row:
