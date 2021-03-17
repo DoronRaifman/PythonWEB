@@ -1,5 +1,5 @@
 import os
-
+import pandas as pd
 from Lesson05.AlgParams.Enums import AlgParamOperationType
 
 
@@ -10,6 +10,13 @@ class AlgParamBase:
         self.alg_params_raw = None
         self.alg_params_data = None
 
+    def _read_alg_params_from_file_pandas(self, file_name):
+        file_name = os.path.join('Data', file_name)
+        data = pd.read_csv(file_name)
+        self.alg_params_rows = data.to_dict(orient='records')
+        self.param_names = self.alg_params_rows[0].keys()
+
+    # demonstrate how much more complicated without pandas
     def _read_alg_params_from_file(self, file_name):
         file_name = os.path.join('Data', file_name)
         self.alg_params_rows = []

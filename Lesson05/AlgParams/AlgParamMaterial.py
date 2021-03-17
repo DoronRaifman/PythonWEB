@@ -11,7 +11,7 @@ class AlgParamsMaterial(AlgParamBase):
     def read_alg_params(self, couple_calc_type: SensorType = SensorType.Any,
                         material_id: PipeMaterialType= PipeMaterialType.Any, project_id: int=-1):
         if self.alg_params_raw is None:
-            self._read_alg_params_from_file('AlgParamsMaterials.csv')
+            self._read_alg_params_from_file_pandas('AlgParamsMaterials.csv')
         self.alg_params = self._make_simple()
         if couple_calc_type.value != -1:
             params_override = self.alg_params_data[(couple_calc_type, -1, -1)]
@@ -29,9 +29,8 @@ class AlgParamsMaterial(AlgParamBase):
             self._handle_override(self.alg_params, params_override)
         return self.alg_params
 
-    def _read_alg_params_from_file(self, csv_file_name):
-        super()._read_alg_params_from_file(csv_file_name)
-        file_name = os.path.join('Data', csv_file_name)
+    def _read_alg_params_from_file_pandas(self, csv_file_name):
+        super()._read_alg_params_from_file_pandas(csv_file_name)
         self.alg_params_raw, self.alg_params_data = {}, {}
         for row in self.alg_params_rows:
             couple_calc_type = row['couple_calc_type']
