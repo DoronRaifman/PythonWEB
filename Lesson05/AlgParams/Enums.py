@@ -31,4 +31,3 @@ class AlgParamOperationType(Enum):
     Replace = 1
     Multiply = 2
 
-
