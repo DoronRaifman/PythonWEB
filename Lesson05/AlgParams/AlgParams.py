@@ -88,21 +88,25 @@ class AlgParamsMaterial(AlgParamBase):
             self._read_alg_params_from_file_pandas('AlgParamsMaterials.csv')
         self.alg_params = self._make_simple()
         if couple_calc_type.value != -1:
-            params_override = self.alg_params_data[(couple_calc_type, -1, -1)]
-            self._handle_override(self.alg_params, params_override)
+            key = (couple_calc_type.value, -1, -1)
+            if key in self.alg_params_data:
+                params_override = self.alg_params_data[key]
+                self._handle_override(self.alg_params, params_override)
         if material_id.value != -1:
-            params_override = self.alg_params_data[(-1, material_id, -1)]
+            params_override = self.alg_params_data[(-1, material_id.value, -1)]
             self._handle_override(self.alg_params, params_override)
         if couple_calc_type.value != -1 and material_id.value != -1:
-            params_override = self.alg_params_data[
-                (couple_calc_type, material_id, -1)]
-            self._handle_override(self.alg_params, params_override)
+            key = (couple_calc_type.value, material_id.value, -1)
+            if key in self.alg_params_data:
+                params_override = self.alg_params_data[key]
+                self._handle_override(self.alg_params, params_override)
         if project_id != -1:
             params_override = self.alg_params_data[(-1, -1, project_id)]
             self._handle_override(self.alg_params, params_override)
-            params_override = self.alg_params_data[
-                (couple_calc_type.value, material_id.value, project_id)]
-            self._handle_override(self.alg_params, params_override)
+            key = (couple_calc_type.value, material_id.value, project_id)
+            if key in self.alg_params_data:
+                params_override = self.alg_params_data[key]
+                self._handle_override(self.alg_params, params_override)
         return self.alg_params
 
     def _read_alg_params_from_file_pandas(self, csv_file_name):
@@ -128,5 +132,7 @@ if __name__ == '__main__':
     worker1._print_alg_params('AlgParams', alg_params)
 
     worker2 = AlgParamsMaterial()
-    alg_params = worker2.read_alg_params(project_id=305)
+    alg_params = worker2.read_alg_params(
+        couple_calc_type=SensorType.Hydrophone,
+        material_id=PipeMaterialType.DuctileIron, project_id=305)
     worker2._print_alg_params('AlgParamsMaterial', alg_params)
