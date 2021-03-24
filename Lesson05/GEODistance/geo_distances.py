@@ -17,6 +17,7 @@ class GeoDistances:
         self.delta_long_to_m = 0.0
         self.points_numpy: np.ndarray = np.zeros(10)
         self.base_lat, self.base_long = 32.0, 34.0
+        self.samples_num = 100
 
     @staticmethod
     def get_geo_distance_two_points_tuple(point1, point2):
@@ -51,7 +52,8 @@ class GeoDistances:
         self.delta_long_to_m = self.get_geo_distance_two_points_tuple(
             (center_lat, center_long-0.5), (center_lat, center_long+0.5))
 
-    def generate_data(self, samples_num):
+    def _generate_data(self, samples_num=100):
+        self.samples_num = samples_num
         points_geo_lat = np.full(samples_num, self.base_lat)
         points_geo_long = np.full(samples_num, self.base_long)
         noise_lat = (np.random.rand(samples_num) - 0.5) / 10000.0
@@ -63,7 +65,12 @@ class GeoDistances:
         points[:, 3] = np.random.randint(0, 3, samples_num)     # source
         self.points_numpy = points
 
-    def find_estimated_geo_distance_vectors(self, point_vect1: list, point_vect2: list):
+    def get_estimated_geo_distance_vectors(self, point_vect1: list, point_vect2: list):
+        """
+        usage:
+        1. point_vect1 - vector, point_vect2 - point
+        2. point_vect1, point_vect2 - both vectors with the same size
+        """
         delta = np.abs(np.array(point_vect1) - np.array(point_vect2))
         delta_m = np.sqrt(np.power(delta[:, 0] * self.delta_lat_to_m, 2.0) +
                           np.power(delta[:, 1] * self.delta_long_to_m, 2.0))
@@ -94,19 +101,36 @@ class GeoDistances:
                                         np.power(points_distance[:, 1], 2.0))
         return points, points_distance_m
 
+    def _demonstrate_get_points_in_range(self):
+        point = (self.base_lat, self.base_long)
+        start_time = time.time()
+        res1_points, res1_dist = self.get_points_in_range(point, 5.0)
+        step1_time = time.time()
+        res2_points, res2_dist = self.get_points_in_range(point, 5.0, OriginType.PipeSections)
+        step2_time = time.time()
+        print(f'samples_num:{self.samples_num}, '
+              f'res1: {res1_dist.size} elapsed {(step1_time - start_time) * 1000:.1f}[mSec], '
+              f'res2: {res2_dist.size} elapsed {(step2_time - step1_time) * 1000:.1f}[mSec]')
+
+    def _demonstrate_get_estimated_geo_distance(self):
+        point = [self.base_lat, self.base_long]
+        points1 = self.points_numpy[:10, :2]
+        points2 = self.points_numpy[10:20, :2]
+
+        print('one point to vector')
+        res1 = self.get_estimated_geo_distance_vectors(points1, point)
+        print(np.round(res1, 1))
+
+        print('vector to vector')
+        res2 = self.get_estimated_geo_distance_vectors(points1, points2)
+        print(np.round(res2, 1))
+
 
 if __name__ == '__main__':
     worker = GeoDistances()
     samples_num = 100000
-    worker.generate_data(samples_num)
+    worker._generate_data(samples_num)
     worker.pre_calculate()
-    point = (worker.base_lat, worker.base_long)
-    start_time = time.time()
-    res1_points, res1_dist = worker.get_points_in_range(point, 5.0)
-    step1_time = time.time()
-    res2_points, res2_dist = worker.get_points_in_range(point, 5.0, OriginType.PipeSections)
-    step2_time = time.time()
-    print(f'samples_num:{samples_num}, '
-          f'res1: {res1_dist.size} elapsed {(step1_time-start_time)*1000:.1f}[mSec], '
-          f'res2: {res2_dist.size} elapsed {(step2_time-step1_time)*1000:.1f}[mSec]')
+    worker._demonstrate_get_points_in_range()
+    worker._demonstrate_get_estimated_geo_distance()
 
