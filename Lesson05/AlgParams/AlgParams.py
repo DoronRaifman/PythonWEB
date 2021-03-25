@@ -114,9 +114,8 @@ class AlgParamsMaterial(AlgParamBase):
             project_id = row['project_id']
             param_name = row['param_name']
             key = (couple_calc_type, material_id, project_id)
-            self.alg_params_raw[
-                (couple_calc_type, material_id, project_id, param_name)
-            ] = row
+            big_key = (couple_calc_type, material_id, project_id, param_name)
+            self.alg_params_raw[big_key] = row
             if key not in self.alg_params_data:
                 self.alg_params_data[key] = {}
             self.alg_params_data[key][param_name] = row
