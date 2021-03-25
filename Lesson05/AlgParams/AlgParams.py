@@ -28,16 +28,17 @@ class AlgParamBase:
                 alg_params[key[-1]] = row['value']
         return alg_params
 
-    @staticmethod
-    def _handle_override(params, params_override):
-        for param_name, param_data in params_override.items():
-            operation = param_data['operation']
-            if operation == AlgParamOperationType.Replace.value:
-                params[param_name] = param_data['value']
-            elif operation == AlgParamOperationType.Multiply.value:
-                params[param_name] *= param_data['value']
-            else:
-                print(f"Override without operation for param {param_name}")
+    def _handle_override(self, params, key):
+        if key in self.alg_params_data:
+            params_override = self.alg_params_data[key]
+            for param_name, param_data in params_override.items():
+                operation = param_data['operation']
+                if operation == AlgParamOperationType.Replace.value:
+                    params[param_name] = param_data['value']
+                elif operation == AlgParamOperationType.Multiply.value:
+                    params[param_name] *= param_data['value']
+                else:
+                    print(f"Override without operation for param {param_name}")
 
     @staticmethod
     def _print_alg_params(title, alg_params):
@@ -58,8 +59,8 @@ class AlgParams(AlgParamBase):
             self._read_alg_params_from_file_pandas('AlgParams.csv')
         self.alg_params = self._make_simple()
         if project_id != -1:
-            params_override = self.alg_params_data[project_id]
-            self._handle_override(self.alg_params, params_override)
+            key = project_id
+            self._handle_override(self.alg_params, key)
         return self.alg_params
 
     def _read_alg_params_from_file_pandas(self, file_name):
@@ -88,25 +89,20 @@ class AlgParamsMaterial(AlgParamBase):
             self._read_alg_params_from_file_pandas('AlgParamsMaterials.csv')
         self.alg_params = self._make_simple()
         if couple_calc_type.value != -1:
-            key = (couple_calc_type.value, -1, -1)
-            if key in self.alg_params_data:
-                params_override = self.alg_params_data[key]
-                self._handle_override(self.alg_params, params_override)
+            self._handle_override(self.alg_params,
+                                  key=(couple_calc_type.value, -1, -1))
         if material_id.value != -1:
-            params_override = self.alg_params_data[(-1, material_id.value, -1)]
-            self._handle_override(self.alg_params, params_override)
+            self._handle_override(self.alg_params,
+                                  key=(-1, material_id.value, -1))
         if couple_calc_type.value != -1 and material_id.value != -1:
-            key = (couple_calc_type.value, material_id.value, -1)
-            if key in self.alg_params_data:
-                params_override = self.alg_params_data[key]
-                self._handle_override(self.alg_params, params_override)
+            self._handle_override(
+                self.alg_params,
+                key=(couple_calc_type.value, material_id.value, -1))
         if project_id != -1:
-            params_override = self.alg_params_data[(-1, -1, project_id)]
-            self._handle_override(self.alg_params, params_override)
-            key = (couple_calc_type.value, material_id.value, project_id)
-            if key in self.alg_params_data:
-                params_override = self.alg_params_data[key]
-                self._handle_override(self.alg_params, params_override)
+            self._handle_override(self.alg_params, key=(-1, -1, project_id))
+            self._handle_override(
+                self.alg_params,
+                key=(couple_calc_type.value, material_id.value, project_id))
         return self.alg_params
 
     def _read_alg_params_from_file_pandas(self, csv_file_name):
