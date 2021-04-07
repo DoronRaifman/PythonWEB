@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/App.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/static/js/App.js"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+<h2>Demonstration AJAX with JQuery</h2>
+<table>
+    <tr>
+        <th>Text and number</th>
+        <th>Response data</th>
+        <th>Activate</th>
+    <tr>
+        <td>
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" name="fname" value="John"><br>
+            <label for="lname">Last name:</label><br>
+            <input type="text" id="lname" name="lname" value="Doe"><br>
+            <label for="age">Age:</label><br>
+            <input type="number" id="age" name="age" value=25><br>
+        </td>
+        <td>
+            <label for="fname">First name:</label><br>
+            <input readonly type="text" id="fname_res"><br>
+            <label for="lname">Last name:</label><br>
+            <input readonly type="text" id="lname_res"><br>
+            <label for="age">Age:</label><br>
+            <input readonly type="text" id="age_res"><br>
+        </td>
+        <td>
+            <button type="button" onclick="get_data()">AJAX call</button>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
