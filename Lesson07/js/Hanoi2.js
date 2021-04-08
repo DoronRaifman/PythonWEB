@@ -55,7 +55,7 @@ function run_timer(){
             towers = tower_move_states[step_index];
             display_towers();
         }
-        else if (step_index > tower_move_states.length + 3){
+        else if (step_index > tower_move_states.length + 10){
             step_index = 0;
             display_towers();
         }
