@@ -14,7 +14,7 @@
     <table>
         <tr>
             <th>Text and number</th> <th>Radio</th>
-            <th>Checkbox</th> <th>Slider</th>
+            <th>Checkbox</th> <th>Slider</th> <th>List box</th>
             <th>Submit</th> </tr>
         <tr>
             <td>
@@ -23,7 +23,7 @@
                 <label for="lname">Last name:</label><br>
                 <input type="text" id="lname" name="lname" value="Doe"><br>
                 <label for="age">Age:</label><br>
-                <input type="number" id="age" name="age" value=25><br><br>
+                <input type="number" id="age" name="age" value=25>
             </td>
             <td>
                 <input type="radio" id="male" name="gender" value="male">
@@ -31,7 +31,7 @@
                 <input type="radio" id="female" name="gender" value="female">
                 <label for="female">Female</label><br>
                 <input type="radio" id="other" name="gender" value="other">
-                <label for="other">Other</label><br><br>
+                <label for="other">Other</label>
             </td>
             <td>
                 <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
@@ -39,12 +39,20 @@
                 <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
                 <label for="vehicle2"> I have a car</label><br>
                 <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
-                <label for="vehicle3"> I have a boat</label><br><br>
+                <label for="vehicle3"> I have a boat</label>
             </td>
             <td>
                 <label for="points">Points (0-10):</label><br>
                 <input type="range" id="points" name="points" min="0" max="10">
-                <br><br>
+            </td>
+            <td>
+                <label>Choose hair color:</label><br>
+                <select name="hair_color" id="hair_color">
+                    <option value="black">Black</option>
+                    <option value="blond">Blond</option>
+                    <option value="brunet">Brunet</option>
+                    <option value="white">White</option>
+                </select>
             </td>
             <td>
                 <input type="submit" value="OK">

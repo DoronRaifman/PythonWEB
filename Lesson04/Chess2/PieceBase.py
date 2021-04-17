@@ -21,7 +21,7 @@ class PieceBase:
         self.row, self.col = row, col
 
     def get_position(self):
-        return (self.row, self.col)
+        return self.row, self.col
 
     def is_legal_position(self, row, col):
         return 1 <= row <= 8 and 1 <= col <= 8
