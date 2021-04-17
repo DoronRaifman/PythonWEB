@@ -1,0 +1,16 @@
+// App.css
+
+fieldset {
+    border:1px solid #999;
+    _border-radius:6px;
+    padding-top: 0;
+    padding-right: 6px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+}
+
+legend {
+    width:auto !important;
+    border:none;
+    font-size: 18px;
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/App.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/static/js/App.js"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+<h2>Calculator</h2>
+<label >X:</label><br>
+<input type="number" id="x" value=25><br>
+<label >Y:</label><br>
+<input type="number" id="y" value=2><br>
+<label >Result:</label><br>
+<input type="number" id="result" readonly><br><br>
+<button type="button" onclick="calculate()">Calculate</button>
+</body>
+</html>

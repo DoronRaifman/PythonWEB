@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:style="http://www.w3.org/1999/xhtml">
+<!--- Macros --->
+
+{% macro draw_projects(projects) %}
+<select id="project_id">
+    {% for project in projects %}
+        <option value={{ project["id"] }}>{{ project["name"] }}</option>
+    {% endfor %}
+</select>
+{% endmacro %}
+
+</html>

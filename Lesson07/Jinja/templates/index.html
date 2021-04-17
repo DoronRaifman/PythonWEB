@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% import "macros.html" as macros %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jinja demo</title>
+    <meta name="description" content="Jinja demo rerun manager application">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/static/css/App.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="/static/js/App.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row" id="top_line">
+        <div class="col-sm-9">
+            <h3>Jinja rerun manager application</h3>
+            <div id="Version"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-10">
+            <form name="Input Params">
+                <fieldset style="position:relative">
+                    <legend>Input Params:</legend>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="radio" id="project" name="Project_Couple" value="0">
+                            Project:
+                        </div>
+                        <div class="col-sm-4">
+                                {{ macros.draw_projects(projects) }}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="radio" id="couple"
+                                   name="Project_Couple" value="1" checked="checked">
+                            Couple:
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="number" class="input_number" id="couple_id" value=16461>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            Days count:
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="number" class="input_number" id="days_count" value="3">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-8">
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" onclick="rerun_execute()">Rerun</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-sm-1">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
