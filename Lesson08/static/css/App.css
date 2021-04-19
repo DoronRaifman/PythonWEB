@@ -1,0 +1,158 @@
+
+.with_border {
+    border-style: inset;
+}
+
+.tab_entry_selected {
+    width: 30px;
+    background: darkblue;
+    border-style: groove;
+    color: white;
+}
+
+.tab_entry_not_selected {
+    width: 30px;
+    background: lightgray;
+    border-style: groove;
+    color: black;
+}
+
+.with_border_and_blue_background {
+    width: 100%;
+    background: darkblue;
+    border-style: groove;
+    color: white;
+}
+
+.with_border_and_gray_background {
+    width: 100%;
+    background: lightgray;
+    border-style: groove;
+    color: black;
+}
+
+.logo {
+  height: 35px;
+}
+
+.small_image {
+  height: 40px;
+  background: #aaa;
+}
+
+.input_number {
+  width: 70px;
+  text-align: right;
+}
+
+.input_text {
+  width: 70px;
+  text-align: left;
+}
+
+.my_button {
+  height:30px;
+  width:150px;
+  font-size: 16px;
+  text-align: center;
+  padding-top:0;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.text_height_middle_with_left_margin {
+  margin-left: 10px;
+  margin-top: 80px;
+}
+
+.big_graph {
+    height: 475px;
+    width: 100%;
+}
+
+.small_graph {
+    height: 280px;
+    width: 100%;
+}
+
+.mid_graph {
+    height: 350px;
+    width: 100%;
+}
+
+fieldset {
+    border:1px solid #999;
+    _border-radius:6px;
+    padding-top: 0;
+    padding-right: 6px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    }
+
+legend {
+    width:auto !important;
+    border:none;
+    font-size: 18px;
+    }
+
+
+.top_page_table {
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  vertical-align: text-bottom;
+}
+
+
+.page_table {
+    /* border-style: inset; */
+    width: 100%;
+}
+
+
+.main_table_row {
+  width: 100%;
+  vertical-align: text-bottom;
+}
+
+
+
+.status_line_table {
+/*
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-bottom: 2px;
+  */
+  border-style: inset;
+  margin-top: 5px;
+  padding-top: 15px;
+  vertical-align: text-bottom;
+
+  width: 100%;
+  background: lightgray;
+}
+
+.status_line_row {
+  width: 100%;
+  padding-top: 15px;
+  vertical-align: text-bottom;
+  background: lightgray;
+}
+
+
+.place_holder {
+    /* border: 1px black solid; */
+    /* border-style: inset; */
+    width: 100%;
+}
+
+/*
+
+table, tr, td, div {
+    border: 1px black solid;
+    /* background-color: white; */
+}
+*/
+

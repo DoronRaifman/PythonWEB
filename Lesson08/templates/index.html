@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% import "macros.html" as macros %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Purchase List</title>
+    <meta name="description" content="Purchase List application">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/App.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="/static/js/App.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row" id="top_line">
+        <div class="col-sm-1">
+            <img class="logo" src="/static/images/logo.png" alt="Logo">
+        </div>
+        <div class="col-sm-3">
+            <h3>Purchase List</h3>
+        </div>
+        <div class="col-sm-3">
+            <div id="Version">Version</div>
+        </div>
+        <div class="col-sm-5">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="Data" class="top_page_table">
+                {{ macros.draw_items(papa, items) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div>
+                <button type="button" class="my_button" onclick="go_up()">Go up</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

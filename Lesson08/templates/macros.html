@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:style="http://www.w3.org/1999/xhtml">
+
+<!--- Macros --->
+
+{% macro On_Off_Button(button_id, handle_function, header) %}
+<span>{{header}}</span>
+<label class="switch">
+    <input type="checkbox" id="{{button_id}}" onchange="{{handle_function}}(this)">
+    <span class="slider round"></span>
+</label>
+{% endmacro %}
+
+
+{% macro TwoWay_Button(button_id, handle_function, header, footer) %}
+<span>{{header}}</span>
+<label class="switch">
+    <input type="checkbox" id="{{button_id}}" onchange="{{handle_function}}(this)">
+    <span class="slider_on round"></span>
+</label>
+<span>{{footer}}</span>
+{% endmacro %}
+
+
+{% macro InputNumber(control_id, handle_function, caption=False, units=False, is_read_only=False, is_visible=True) %}
+<table  {% if is_visible == False %} hidden{% endif %}>
+    <tr>
+        {% if caption != False %}
+        <td width="120px"><span>{{caption}}</span></td>
+        {% endif %}
+        <td><input type="number" class="input_number" id="{{control_id}}" onchange="{{handle_function}}(this) "
+        {% if is_read_only %}
+            readonly
+        {% endif %}
+        ></td>
+        {% if units != False %}
+        <td width="45px" align="left">{{units}}</td>
+        {% endif %}
+    </tr>
+</table>
+{% endmacro %}
+
+
+{% macro InputText(control_id, handle_function, caption=False, units=False, is_read_only=False) %}
+<table>
+    <tr>
+        {% if caption != False %}
+        <td width="120px"><span>{{caption}}</span></td>
+        {% endif %}
+        <td><input type="text" class="input_text" id="{{control_id}}" onchange="{{handle_function}}(this) "
+        {% if is_read_only %}
+            readonly
+        {% endif %}
+         ></td>
+        {% if units != False %}
+        <td width="45px" align="left">{{units}}</td>
+        {% endif %}
+    </tr>
+</table>
+{% endmacro %}
+
+
+{% macro Button(button_id, handle_function, caption) %}
+<button type="button" class="my_button" id="{{button_id}}" onclick="{{handle_function}}(this)">{{caption}}</button>
+{% endmacro %}
+
+
+{% macro RadioButton(button_id, handle_function, group_name, caption, value) %}
+<input type="radio" id="{{button_id}}" name="{{group_name}}" value="{{value}}" onchange="{{handle_function}}(this)"> {{caption}}
+{% endmacro %}
+
+
+{% macro CheckBox(button_id, handle_function, caption) %}
+<input type="checkbox" id="{{button_id}}" name="{{caption}}" value="{{caption}}" onchange="{{handle_function}}(this)"> {{caption}}
+{% endmacro %}
+
+
+{% macro slider1(name, min_value, max_value, precision=False, units='') %}
+<fieldset>
+    <legend>{{name}}</legend>
+    <input type="number" _key="{{name}}" style="width:100px" min={{ min_value }} max="{{ max_value }}"
+           {% if precision %}step="0.{{ '0' * (precision-1) }}1" {% endif %}
+    >{{ units }}
+    <input style="float:right" class="slider" type="range" _key="{{group}}.{{name}}"
+           val_min="{{ min_value }}" val_max="{{ max_value }}">
+</fieldset>
+{% endmacro %}
+
+
+{% macro slider_simple(id, name, min_value, max_value, precision, units) %}
+<form>
+    <fieldset>
+        <legend>{{name}}</legend>
+        <table class="page_table">
+            <tr class="main_table_row">
+                <td width="100%">
+                    <input type="range" min="{{min_value}}" max="{{max_value}}" value="{{min_value}}" class="slider"
+                           id="{{id}}" width="100%">
+                </td>
+            </tr>
+            <tr class="main_table_row">
+                <td align="left" width="30%">{{min_value}}</td>
+                <td align="right" width="30%">{{max_value}}</td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+{% endmacro %}
+
+
+{% macro slider_very_simple(id, name, min_value, max_value, precision, units) %}
+<div class="slidecontainer">
+    <input type="range" min="{{min_value}}" max="{{max_value}}" value="{{min_value}}" class="slider" id="{{id}}" width="100%">
+    <span>{{name}}:</span>
+</div>
+{% endmacro %}
+
+
+{% macro draw_item(item, widths) %}
+            <tr>
+                {% for key in item %}
+                    {% set width = widths[loop.index0]|string %}
+                    {% set field_val = item[key] %}
+                    <td class="with_border"> {{ field_val }} </td>
+                {% endfor %}
+                <td class="with_border">
+                    <button type="button" class="my_button" onclick="call_item({{ item['id'] }})">Goto</button>
+                </td>
+                <td class="with_border" style="width: {{ widths[4] }}%">
+                </td>
+            </tr>
+{% endmacro %}
+
+
+{% macro draw_items(papa, items) %}
+    <table width="50%">
+        <tr>
+            <td id="papa_id"> {{ papa['id'] }}</td>
+            <td id="papa_name">{{ papa['item_name'] }}</td>
+            <td id="grandpa_id">{{ papa['papa_id'] }}</td>
+        </tr>
+    </table>
+    <table width="100%">
+        {% set widths = [40, 5, 10, 10, 30, 5] %}
+
+        <thead>
+        {% for key in items[0] %}
+            {% set width = widths[loop.index0]|string %}
+            <th class="with_border" style="width: {{ width }}%"> {{ key }} </th>
+        {% endfor %}
+        <th class="with_border" style="width: {{ widths[4] }}%">Goto</th>
+        <th class="with_border" style="width: {{ widths[5] }}%">...</th>
+
+        </thead>
+
+        {% for item in items %}
+            {{ draw_item(item, widths) }}
+        {% endfor %}
+
+    </table>
+
+{% endmacro %}
+
+</html>
