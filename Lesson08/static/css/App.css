@@ -118,30 +118,6 @@ legend {
 }
 
 
-
-.status_line_table {
-/*
-  margin-left: 25px;
-  margin-right: 25px;
-  margin-bottom: 2px;
-  */
-  border-style: inset;
-  margin-top: 5px;
-  padding-top: 15px;
-  vertical-align: text-bottom;
-
-  width: 100%;
-  background: lightgray;
-}
-
-.status_line_row {
-  width: 100%;
-  padding-top: 15px;
-  vertical-align: text-bottom;
-  background: lightgray;
-}
-
-
 .place_holder {
     /* border: 1px black solid; */
     /* border-style: inset; */

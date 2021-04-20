@@ -14,7 +14,6 @@ app = Flask(__name__)
 class Main:
     logger = None
     worker = Worker()
-    cur_papa = 0
 
     @classmethod
     def start_work(cls):
@@ -37,42 +36,43 @@ class Main:
 
 
 @app.route('/')
-def index():
+def login():
+    return render_template('login.html')
+
+
+@app.route('/login')
+def login_data():
+    user_name = request.args.get('user_name')
+    records = Main.worker.find_user_by_name(user_name)
+    if len(records) == 0:
+        res = {'user_id': 0, 'user_name': '---'}
+    else:
+        res = records[0]
+    return jsonify(res)
+
+
+@app.route('/get_data')
+def get_data():
     papa_id = request.args.get('papa_id')
     if papa_id is None:
         papa_id = 0
-    Main.cur_papa = int(papa_id)
-    items_list = Main.worker.get_item_siblings(papa_id=Main.cur_papa)
-    items = Main.worker.item_list_to_dict_list(items_list)
-    if Main.cur_papa != 0:
-        papa_item = Main.worker.find_item_by_id(Main.cur_papa)
-        papa_dict_list = Main.worker.item_list_to_dict_list([papa_item])
-        papa = papa_dict_list[0]
+    papa_id = int(papa_id)
+    user_id = int(request.args.get('user_id'))
+    records = Main.worker.find_user_by_id(user_id)
+    user_name = records[0]['user_name']
+    items = Main.worker.get_item_siblings(user_id, papa_id)
+    if papa_id != 0:
+        papa = Main.worker.find_item_by_id(user_id, papa_id)
     else:
         papa = {'id': 0, 'item_name': 'Top Level', 'papa_id': 0}
-    return render_template('index.html', papa=papa, items=items)
+    return render_template(
+        'items.html', papa=papa, items=items, user_id=user_id,
+        user_name=user_name, version=SoftwareVersion.version_name)
 
 
 @app.route('/version', methods=['GET'])
 def get_version():
-    return f"<h3> {SoftwareVersion.version_name}</h3>"
-
-
-@app.route('/goto', methods=['GET'])
-def goto():
-    item_id = int(request.args.get('item_id'))
-    Main.cur_papa = item_id
-    Main.logger.debug(f'goto {item_id}')
-    return jsonify("OK")
-
-
-@app.route('/get_item', methods=['GET'])
-def get_item():
-    item_id = int(request.args.get('item_id'))
-    item = Main.worker.find_item_by_id(item_id)
-    Main.logger.debug(f'goup to {item.id}, {item.item_name}')
-    item_dict_list = Main.worker.item_list_to_dict_list([item])
-    return jsonify(item_dict_list[0])
+    return f"<h3>{SoftwareVersion.version_name}</h3>"
 
 
 @app.route('/favicon.ico')

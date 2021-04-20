@@ -28,7 +28,8 @@ class DBInstance:
     connect_info = {
         'user': 'Doron', 'password': 'Talinka1',
         'host': 'localhost', 'database': 'lesson8',
-        'raise_on_warnings': True, 'auth_plugin': 'mysql_native_password'
+        'raise_on_warnings': True,
+        'auth_plugin': 'mysql_native_password'
     }
     db = None
     cursor = None
@@ -65,7 +66,9 @@ class DBInstance:
             cls.cursor = cls.db.cursor()
             res = cls.cursor.execute(sql_cmd)
         except mysql.connector.Error as ex:
-            raise DBException(f"DBInstance execute_sql exception: sql={sql_cmd} ex: {ex}")
+            raise DBException(
+                f"DBInstance execute_sql exception: "
+                f"sql={sql_cmd} ex: {ex}")
         return res
 
     @classmethod
@@ -82,7 +85,8 @@ class DBInstance:
             else:
                 field_values += f"{value}, "
         field_values = field_values[:-2]
-        sql_cmd = f"INSERT INTO {table_name} ({field_names}) VALUES ({field_values})"
+        sql_cmd = f"INSERT INTO {table_name} " \
+                  f"({field_names}) VALUES ({field_values})"
         cls.execute_sql(sql_cmd)
         item_id = cls.cursor.lastrowid
         cls.db.commit()
@@ -122,7 +126,8 @@ class DBInstance:
         fetch_records = list(fetch_records)
         records = []
         for index, value in enumerate(fetch_records):
-            record_data = {DBInstance.cursor.description[i][0]: value[i] for i in range(len(value))}
+            record_data = {DBInstance.cursor.description[i][0]: value[i]
+                           for i in range(len(value))}
             records.append(record_data)
         return records
 

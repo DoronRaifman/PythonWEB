@@ -1,49 +1,41 @@
 // App.js
-
 document.addEventListener('DOMContentLoaded', function()
 {
     console.log('index: DOM fully loaded and parsed');
-//    var myVar = setInterval(main_timer, 500);
-    $.get(
-        '/version',
-        {'stam': 1},
-        function (data) {
-            console.log(data);
-            document.getElementById("Version").innerHTML = " " + data;
-        },
-        'html');
 });
 
 
-
-function main_timer(){
-//    console.log("myTimer");
+function call_item(user_id, item_id){
+    console.log('goto item:' + item_id);
+    var url = "/get_data?user_id=" + user_id + "&papa_id=" + item_id;
+    window.location.href = url;
 }
-
-
-function get_radio(group_name){
-    var elements = document.getElementsByName(group_name);
-    var val = 0;
-    for (var i = 0; i < elements.length; i++){
-        var elem = elements[i];
-        if(elem.checked) {
-            val = elem.value;
-            break;
-        }
-    }
-    return(val);
-}
-
-
-function call_item(item_id){
-    console.log('goto' + item_id);
-    window.location.href = "/?papa_id="+item_id;
-}
-
 
 function go_up(){
-    console.log('goup');
+    console.log('go up');
     grandpa_id = document.getElementById("grandpa_id").innerHTML;
-    window.location.href = "/?papa_id="+grandpa_id;
+    user_id = document.getElementById("user_id").value
+    call_item(user_id, grandpa_id)
 }
 
+function login() {
+    var user_name_1 = document.getElementById("user_name").value;
+    $.get(
+        '/login',
+        {user_name: user_name_1},
+        function (data) {
+            console.log(data);
+            user_id1 = data['idusers'];
+            user_id1 = parseInt(user_id1);
+            if (user_id1 > 0){
+                user_name = user_name_1;
+                user_id = user_id1;
+                call_item(user_id, 0);
+            }
+            else {
+                alert('Bad user name');
+            }
+            document.getElementById("Version").innerHTML = " " + data;
+        },
+        'json');
+}
