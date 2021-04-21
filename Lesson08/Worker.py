@@ -12,13 +12,6 @@ class Worker:
     def disconnect(self):
         DBInstance.disconnect()
 
-    def get_item_siblings(self, user_id: int, papa_id: int):
-        records = DBInstance.find(
-            self.table_items_name,
-            where_clause=f"idusers={user_id} and papa_id={papa_id}",
-            order_by="order_id ASC")
-        return list(records)
-
     def find_item_by_id(self, user_id: int, item_id: int):
         records = DBInstance.find(
             self.table_items_name,
@@ -41,10 +34,6 @@ class Worker:
     def delete_items(self, user_id: int, item_id: int):
         DBInstance.delete(self.table_items_name, where_clause=f'iditems=item_id')
 
-    def delete_item_with_all_siblings(self, user_id: int, item_id: int):
-        pass
-        # ToDo: implement method
-
     def delete_all_items(self):
         DBInstance.delete(self.table_items_name, where_clause='iditems > 0')
 
@@ -54,7 +43,7 @@ class Worker:
             where_clause=f"idusers={user_id} and item_name='{item_name}'")
         return list(records)
 
-    def find_items_by_name_start(self, user_id: int, item_name: str):
+    def find_items_by_name_part(self, user_id: int, item_name: str):
         records = DBInstance.find(
             self.table_items_name,
             where_clause=f"idusers={user_id} and item_name LIKE '{item_name}%'")
@@ -69,6 +58,43 @@ class Worker:
         records = DBInstance.find(
             self.table_users_name, where_clause=f"idusers={user_id}")
         return list(records)
+
+    def get_item_siblings(self, user_id: int, papa_id: int):
+        records = DBInstance.find(
+            self.table_items_name,
+            where_clause=f"idusers={user_id} and papa_id={papa_id}",
+            order_by="order_id ASC")
+        return list(records)
+
+    def get_item_siblings_recursive(self, user_id: int, item_id: int):
+        items_list = self.get_item_siblings(user_id, item_id)
+        for item in items_list:
+            sons = self.get_item_siblings_recursive(user_id, item['iditems'])
+            item['sons'] = sons if len(sons) > 0 else None
+        return items_list
+
+    def delete_item_siblings_recursive(self, user_id: int, item_id: int):
+        pass
+        # ToDo: implement method
+
+    def print_db_recursive(self, items: list, papa_name: str):
+        print(f'==>Items in {papa_name}')
+        # direct sons
+        for item in items:
+            print(f'\t{item["item_name"]}')
+        # recursive go down
+        department_sons = [
+            item for item in items if item['sons'] is not None]
+        for item in department_sons:
+            self.print_db_recursive(
+                item['sons'], f"{papa_name}{item['item_name']}/")
+
+    def print_db(self, user_id: int):
+        print(f"Print all items for user_id:{user_id}")
+        print('=====================================')
+        items = self.get_item_siblings_recursive(user_id, 0)
+        self.print_db_recursive(items, '/')
+        print('=====================================')
 
     def fill_initial_data(self, user_id):
         table_name = 'items'
@@ -102,6 +128,8 @@ class Worker:
 if __name__ == '__main__':
     worker = Worker()
     worker.connect()
-    worker.fill_initial_data(user_id=1)
+    user_id = 1
+    # worker.fill_initial_data(user_id)
+    worker.print_db(user_id)
     worker.disconnect()
 

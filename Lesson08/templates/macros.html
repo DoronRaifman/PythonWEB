@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:style="http://www.w3.org/1999/xhtml">
-
 <!--- Macros --->
 
 {% macro draw_item(item, widths, user_id) %}
@@ -12,62 +11,62 @@
                 {% endfor %}
                 <td class="with_border">
                     <button type="button" class="my_button"
-                            onclick="call_item({{ user_id }}, {{ item['iditems'] }})">
-                        Goto</button>
+                    onclick="call_item({{ user_id }}, {{ item['iditems'] }})">
+                    Goto</button>
                 </td>
-                <td class="with_border" style="width: {{ widths[4] }}%">
-                </td>
+<!--                <td class="with_border" style="width: {{ widths[4] }}%">-->
+<!--                </td>-->
             </tr>
 {% endmacro %}
 
 
 {% macro draw_items(papa, items, user_id) %}
-    <table width="50%">
+    <table width="100%">
         <tr>
+            <td style="width:30%;">
+                <h4 id="papa_name">{{ papa['item_name'] }}</h4>
+            </td>
+            <td style="width:30%;"><button type="button" class="my_button"
+                        onclick="go_up()">Go up</button></td>
             <td><h4 id="papa_id" hidden>{{ papa['id'] }}</h4></td>
-            <td><h4 id="papa_name">{{ papa['item_name'] }}</h4></td>
             <td><h4 id="grandpa_id" hidden>{{ papa['papa_id'] }}</h4></td>
         </tr>
     </table>
     <table width="100%">
         {% set widths = [5, 40, 4, 4, 4, 4, 5] %}
-
         <thead>
-        {% for key in items[0] %}
-            {% set width = widths[loop.index0]|string %}
-            <th class="with_border" style="width: {{ width }}%"> {{ key }} </th>
-        {% endfor %}
-        <th class="with_border" style="width: {{ widths[4] }}%">Goto</th>
-        <th class="with_border" style="width: {{ widths[5] }}%">...</th>
-
+            {% for key in items[0] %}
+                {% set width = widths[loop.index0]|string %}
+                <th class="with_border" style="width: {{ width }}%;"> {{ key }} </th>
+            {% endfor %}
+            <th class="with_border" style="width: {{ widths[4] }}%;">Goto</th>
         </thead>
-
         {% for item in items %}
             {{ draw_item(item, widths, user_id) }}
         {% endfor %}
-
     </table>
-
 {% endmacro %}
 
 
 {% macro draw_header_line(user_id, user_name, version) %}
-        <div class="col-sm-1">
-            <img class="logo" src="/static/images/logo.png" alt="Logo">
-        </div>
-        <div class="col-sm-3">
-            <h3>Purchase List</h3>
-        </div>
-        <div class="col-sm-2">
-            <div id="Version"><p>{{ version }}</p></div>
-        </div>
-        <div class="col-sm-5">
-            <label hidden>User id:</label>
-            <input type="number" id="user_id" value={{ user_id }}
-                   readonly style="width:50px;" hidden>
-            <label>User name:</label>
-            <input type="text" id="user_name" value="{{ user_name }}" readonly>
-        </div>
+    <table width="450px">
+        <tr>
+            <td style="width:8%;">
+                <img class="logo" src="/static/images/logo.png" alt="Logo">
+            </td>
+            <td style="width:30%;"><h5>Purchase List</h5></td>
+            <td style="width:15%;">
+                <div id="Version"><h7>{{ version }}</h7></div>
+            </td>
+            <td style="width:47%;">
+                <label>User:</label>
+                <input type="text" id="user_name" value="{{ user_name }}"
+                       style="width:100px;" readonly>
+            </td>
+        </tr>
+    </table>
+    <input type="number" id="user_id" value={{ user_id }}
+           readonly style="width:50px;" hidden>
 {% endmacro %}
 
 

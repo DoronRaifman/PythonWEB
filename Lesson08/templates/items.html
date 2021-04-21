@@ -18,21 +18,13 @@
 <body>
 <div class="container-fluid">
     <div class="row" id="top_line">
-        {{ macros.draw_header_line(user_id, user_name, version) }}
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div id="Data" class="top_page_table">
-                {{ macros.draw_items(papa, items, user_id) }}
-            </div>
+        <div class="col-xs-12">
+            {{ macros.draw_header_line(user_id, user_name, version) }}
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
-            <div>
-                <button type="button" class="my_button"
-                        onclick="go_up()">Go up</button>
-            </div>
+        <div class="col-xs-12">
+            {{ macros.draw_items(papa, items, user_id) }}
         </div>
     </div>
 </div>
