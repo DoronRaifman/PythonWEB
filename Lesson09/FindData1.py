@@ -1,5 +1,5 @@
-from Lesson09.Core.MongoInstance import MongoInstance, MongoDBException
 import pymongo
+from Lesson09.Core.MongoInstance import MongoInstance, MongoDBException
 
 
 class FindData:

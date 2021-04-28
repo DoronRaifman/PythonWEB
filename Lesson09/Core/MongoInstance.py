@@ -29,6 +29,10 @@ class MongoInstance:
             cls.generate_exception("disconnect", ex)
 
     @classmethod
+    def replace_collection(cls, new_collection):
+        cls.db_collection = cls.db[new_collection]
+
+    @classmethod
     def is_connected(cls):
         return cls.client is not None and cls.db is not None and cls.db_collection is not None
 
