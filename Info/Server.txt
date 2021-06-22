@@ -1,0 +1,52 @@
+Usefull Server info
+
+
+157.230.109.192
+http://knight-devs.com/
+
+www.knight-devs.co.il.
+
+ftp.knight-devs.co.il.
+knight-devs.co.il.
+
+
+sudo nc localhost 80 < /dev/null; echo $?
+sudo nc localhost 5000 < /dev/null; echo $?
+sudo nc 0.0.0.0 5000 < /dev/null; echo $?
+
+
+docker build -t flask-app .
+docker run -d --restart=always -p 80:80 -t flask-app
+docker run --restart=always -p 80:80 -t flask-app
+docker ps
+
+docker run -d -t nginx:1.13.7
+docker run -t nginx:1.13.7
+
+
+/var/log/nginx/host.access.log
+
+
+FROM python:3
+WORKDIR /usr/src/app
+COPY . .
+CMD ["test.py"]
+ENTRYPOINT ["python3"]
+
+docker build -t app .
+sudo docker run -p 80:80 -t app
+
+
+docker build -t app .
+sudo docker run -p80:80 -t app
+
+
+Create venv
+python3.8 -m venv env
+env/bin/pip3 install -r requirements.txt
+
+secure client uuid: JWT
+verify json structure: AJV
+
+
+
