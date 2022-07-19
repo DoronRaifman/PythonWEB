@@ -67,9 +67,14 @@ venv/bin/pip3 install -r requirements.txt
 
 rm -r dirname
 
+#detect wifi connection
+iwgetid
+
 
 GitHub Token:
 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
+
+my house ip: 89.237.87.241
 
 
 
