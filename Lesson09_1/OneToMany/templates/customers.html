@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% block title %} Customers {% endblock %}</h2>
+    <table class="table_with_border_wide">
+        <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th></tr>
+    {% for customer in customers %}
+        <tr>
+            <td>{{customer.id}}</td>
+            <td><a href="{{ url_for('customers_one', customer_id=customer.id)}}">{{customer.name}}</a></td>
+            <td>{{customer.contact}}</td>
+            <td>{{customer.contact_phone}}</td><td>{{customer.contact_email}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% if customer_id is not none %}
+        {% set customer = customers[0] %}
+        <h3>Clients for {{customer.name}}:</h3>
+        <table class="table_with_border_wide">
+            <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th></tr>
+        {% for client in customer.clients %}
+            <tr>
+                <td>{{client.id}}</td><td>{{client.name}}</td><td>{{client.contact}}</td>
+                <td>{{client.contact_phone}}</td><td>{{client.contact_email}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        {% for client in customer.clients %}
+            <h3>Sites for {{client.name}}:</h3>
+            <table class="table_with_border_wide">
+                <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th></tr>
+                {% for site in client.sites %}
+                    <tr>
+                        <td>{{site.id}}</td><td>{{site.name}}</td><td>{{site.contact}}</td>
+                        <td>{{site.contact_phone}}</td><td>{{site.contact_email}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

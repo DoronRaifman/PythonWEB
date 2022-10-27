@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% import "macros.html" as macros %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {% endblock %} - Forks Manager</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="/static/css/App.css" rel="stylesheet">
+    <script src="/static/js/main.js"></script>
+    <link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon">
+
+    <style>
+        .title {
+            margin: 5px;
+        }
+        .content {
+            margin: 5px;
+            width: 100%;
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            flex-wrap: wrap;-->
+        }
+        .customer {
+<!--            flex: 20%;-->
+            padding: 10px;
+            margin: 5px;
+            background-color: #f3f3f3;
+            inline-size: 100%;
+        }
+        .client {
+            padding: 10px;
+            margin: 10px;
+            background-color: #fff;
+        }
+        .site {
+            flex: 20%;
+            padding: 10px;
+            margin: 5px;
+            background-color: #f3f3f3;
+            inline-size: 100%;
+        }
+        .title a {
+            color: #00a36f;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: blue;
+            font-size: 1.5em;
+            margin-left: 50px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('customers') }}">Customers</a>
+        <a href="{{ url_for('create_db') }}">Re-init DB</a>
+        <a href="#">About</a>
+    </nav>
+    <hr>
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+// App.css
+
+th, td, tr {
+    padding: 5px;
+    text-align: left;
+    align: left;
+    vertical-align: top;
+    float: top;
+    text-indent: top;
+    //min-width: 100px;
+    overflow: scroll;
+}
+
+.table_with_border {
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-left: 10px;
+    padding: 5px;
+    vertical-align: top;
+    float: top;
+    text-indent: top;
+}
+
+.table_with_border_wide {
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-left: 5px;
+    padding: 5px;
+    width: 600px;
+    vertical-align: top;
+    horizontal-align: left;
+    float: top;
+    text-indent: top;
+}
+
+.width_150 {
+    width: 150px;
+}
+
+.width_200 {
+    width: 200px;
+}
+
+.align_top {
+    float: top;
+    vertical-align: text-top;
+    padding: 0px;
+    text-align: center;
+}
+
+.align_left {
+  float: left;
+  text-align: left;
+}
+
+.align_right {
+  float: right;
+  text-align: left;
+}
+
+select {
+    width:100px;
+    margin-top: 10px;
+}
+
+button {
+    width: 100px;
+}
+
+input {
+    width: 100px;
+}
+
+.input_width{
+    width: 120px;
+}
+
+.select_narrow {
+    width:60px;
+    margin-top: 10px;
+}
+.select_wide {
+    width:140px;
+    margin-top: 10px;
+}
+
+fieldset {
+    border:1px solid #999;
+    _border-radius:6px;
+    padding-top: 0;
+    padding-right: 6px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+}
+
+/*
+legend {
+    border: 1px black solid;
+    _border-radius: 20px;
+}
+
+
+legend {
+    width:auto !important;
+    border:none;
+    font-size: 18px;
+}
+*/
