@@ -4,5 +4,6 @@
 *.log
 *.log.*
 *.pickle
+*.db
 /SysConfig.toml
 /Applications/CalcRerun/CalcRerun.toml
