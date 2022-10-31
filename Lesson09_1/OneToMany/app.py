@@ -187,13 +187,72 @@ class Site(db.Model):
 @app.route('/customers')
 def customers():
     customers_list = Customer.query.all()
-    return render_template('customers.html', customers=customers_list, customer_id=None)
+    return render_template('customers.html', customers=customers_list, customer_id=None, client_id=None)
 
 
 @app.route('/customers/<int:customer_id>/')
 def customers_one(customer_id):
     customer = Customer.query.get_or_404(customer_id)
-    return render_template('customers.html', customers=[customer], customer_id=customer_id)
+    return render_template('customers.html', customers=[customer], customer_id=customer_id, client_id=None)
+
+
+@app.route('/customers/<int:customer_id>/clients/<int:client_id>')
+def customers_one_client(customer_id, client_id):
+    customer = Customer.query.get_or_404(customer_id)
+    return render_template('customers.html', customers=[customer], customer_id=customer_id, client_id=client_id)
+
+
+@app.route('/customers/add', methods=('GET', 'POST'))
+def customers_add():
+    if request.method == 'POST':
+        name = request.form['name']
+        contact = request.form['contact']
+        contact_phone = request.form['contact_phone']
+        contact_email = request.form['contact_email']
+
+        customer = Customer(name=name, contact=contact, contact_phone=contact_phone, contact_email=contact_email)
+        db.session.add(customer)
+        db.session.commit()
+
+        return redirect(url_for('customers', customer_id=customer.id, client_id=None))
+
+    return render_template('customers_add.html')
+
+
+@app.route('/clients/add/<int:customer_id>/', methods=('GET', 'POST'))
+def clients_add(customer_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        contact = request.form['contact']
+        contact_phone = request.form['contact_phone']
+        contact_email = request.form['contact_email']
+
+        client = Client(name=name, contact=contact, contact_phone=contact_phone, contact_email=contact_email,
+                        customer_id=customer_id)
+        db.session.add(client)
+        db.session.commit()
+
+        return redirect(url_for('customers_one', customer_id=customer_id, client_id=client.id))
+
+    return render_template('customers_add.html')
+
+
+@app.route('/clients/add/<int:customer_id>/<int:client_id>/', methods=('GET', 'POST'))
+def sites_add(customer_id, client_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        contact = request.form['contact']
+        contact_phone = request.form['contact_phone']
+        contact_email = request.form['contact_email']
+
+        site = Site(name=name, contact=contact, contact_phone=contact_phone, contact_email=contact_email,
+                    client_id=client_id)
+        db.session.add(site)
+        db.session.commit()
+
+        return redirect(url_for('customers_one_client', customer_id=customer_id, client_id=client_id))
+
+    return render_template('customers_add.html')
 
 
 @app.route('/create_db', methods=['GET', 'POST'])
