@@ -84,6 +84,10 @@ input {
     margin-top: 10px;
 }
 
+.action_image {
+    width:25px;
+}
+
 fieldset {
     border:1px solid #999;
     _border-radius:6px;
@@ -92,6 +96,8 @@ fieldset {
     padding-bottom: 4px;
     padding-left: 8px;
 }
+
+
 
 /*
 legend {

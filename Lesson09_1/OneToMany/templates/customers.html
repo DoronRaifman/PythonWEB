@@ -2,24 +2,32 @@
 
 {% block content %}
     <h2>{% block title %} Customers {% endblock %}</h2>
-    <button><a href="{{url_for('customers_add')}}">Add customer</a></button><br><br>
     <table class="table_with_border_wide">
-        <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th></tr>
+        <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th><th></th></tr>
     {% for customer in customers %}
         <tr>
             <td>{{customer.id}}</td>
-            <td><a href="{{ url_for('customers_one', customer_id=customer.id)}}">{{customer.name}}</a></td>
+            <td><a href="{{url_for('customers_one', customer_id=customer.id)}}">{{customer.name}}</a></td>
             <td>{{customer.contact}}</td>
             <td>{{customer.contact_phone}}</td><td>{{customer.contact_email}}</td>
+            <td>
+                <a href="{{url_for('customers_edit', customer_id=customer.id)}}"><img src="/static/images/Edit.png" class="action_image"></a>
+                <a href="{{url_for('customers_del', customer_id=customer.id)}}"><img src="/static/images/Delete.png" class="action_image"></a>
+            </td>
         </tr>
     {% endfor %}
+        <tr>
+            <td>
+                <a href="{{url_for('customers_add')}}"><img src="/static/images/Add.png" class="action_image"></a>
+            </td>
+            <td></td><td></td><td></td><td></td><td></td>
+        </tr>
     </table>
     {% if customer_id is not none %}
         {% set customer = customers[0] %}
         <h3>Clients for {{customer.name}}:</h3>
-        <button><a href="{{url_for('clients_add', customer_id=customer_id)}}">Add client</a></button><br><br>
         <table class="table_with_border_wide">
-            <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th></tr>
+            <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th><th></th></tr>
         {% for client in customer.clients %}
             {% if client_id is none or (client_id is not none and client.id == client_id) %}
             <tr>
@@ -27,29 +35,45 @@
                 <td><a href="{{ url_for('customers_one_client', customer_id=customer_id, client_id=client.id)}}">{{client.name}}</a></td>
                 <td>{{client.contact}}</td>
                 <td>{{client.contact_phone}}</td><td>{{client.contact_email}}</td>
+                <td>
+                <a href="{{url_for('clients_edit', customer_id=customer_id, client_id=client.id)}}"><img src="/static/images/Edit.png" class="action_image"></a>
+                <a href="{{url_for('clients_del', customer_id=customer_id, client_id=client.id)}}"><img src="/static/images/Delete.png" class="action_image"></a>
+                </td>
             </tr>
             {% endif %}
         {% endfor %}
+            <tr>
+                <td>
+                    <a href="{{url_for('clients_add', customer_id=customer_id)}}"><img src="/static/images/Add.png" class="action_image"></a>
+                </td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
         </table>
 
         {% for client in customer.clients %}
             {% if client_id is none or (client_id is not none and client.id == client_id) %}
                 <h3>Sites for {{client.name}}:</h3>
-                {% if client.sites | length == 0 %}
-                <h4>None</h4>
-                {% endif %}
-                <button><a href="{{url_for('sites_add', customer_id=customer_id, client_id=client.id)}}">Add site</a></button><br><br>
-                {% if client.sites | length > 0 %}
+<!--                <button><a href="{{url_for('sites_add', customer_id=customer_id, client_id=client.id)}}">Add site</a></button><br><br>-->
                 <table class="table_with_border_wide">
-                    <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th></tr>
+                    <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th><th></th></tr>
                     {% for site in client.sites %}
                         <tr>
                             <td>{{site.id}}</td><td>{{site.name}}</td><td>{{site.contact}}</td>
                             <td>{{site.contact_phone}}</td><td>{{site.contact_email}}</td>
+                            <td>
+                                <a href="{{url_for('sites_edit', customer_id=customer_id, site_id=site.id)}}"><img src="/static/images/Edit.png" class="action_image"></a>
+                                <a href="{{url_for('sites_del', customer_id=customer_id, site_id=site.id)}}"><img src="/static/images/Delete.png" class="action_image"></a>
+                            </td>
                         </tr>
                     {% endfor %}
+                        <tr>
+                            <td>
+                                <a href="{{url_for('sites_add', customer_id=customer_id, client_id=client.id)}}">
+                                    <img src="/static/images/Add.png" class="action_image"></a>
+                            </td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
                 </table>
-                {% endif %}
             {% endif %}
         {% endfor %}
     {% endif %}

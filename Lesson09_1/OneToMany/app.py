@@ -3,6 +3,7 @@ import socket
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm.attributes import flag_modified
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -30,7 +31,7 @@ class App:
         port = 5000
         # real_ip = "127.0.0.1"
         url = f"http://{real_ip}:{port}"
-        print(f'start serving server site on url: {url}')
+        print(f'start serving server site (1->n) on url: {url}')
         app.run(host=real_ip, port=port)
 
     @classmethod
@@ -219,6 +220,31 @@ def customers_add():
     return render_template('customers_add.html')
 
 
+@app.route('/customers/edit/<int:customer_id>', methods=('GET', 'POST'))
+def customers_edit(customer_id):
+    if request.method == 'POST':
+        customer = Customer.query.get_or_404(customer_id)
+        customer.name = request.form['name']
+        customer.contact = request.form['contact']
+        customer.contact_phone = request.form['contact_phone']
+        customer.contact_email = request.form['contact_email']
+
+        db.session.commit()
+
+        return redirect(url_for('customers', customer_id=customer.id, client_id=None))
+
+    customer = Customer.query.get_or_404(customer_id)
+    return render_template('customers_edit.html', customer_id=customer_id, customer=customer)
+
+
+@app.route('/customers/del/<int:customer_id>/', methods=('GET', ))
+def customers_del(customer_id):
+    customer = Customer.query.get_or_404(customer_id)
+    db.session.delete(customer)
+    db.session.commit()
+    return render_template('customers.html', customer_id=None, customer=None)
+
+
 @app.route('/clients/add/<int:customer_id>/', methods=('GET', 'POST'))
 def clients_add(customer_id):
     if request.method == 'POST':
@@ -232,9 +258,35 @@ def clients_add(customer_id):
         db.session.add(client)
         db.session.commit()
 
-        return redirect(url_for('customers_one', customer_id=customer_id, client_id=client.id))
+        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
 
-    return render_template('customers_add.html')
+    return render_template('clients_add.html')
+
+
+@app.route('/clients/edit/<int:customer_id>/<int:client_id>/', methods=('GET', 'POST'))
+def clients_edit(customer_id, client_id):
+    if request.method == 'POST':
+        client = Client.query.get_or_404(client_id)
+        client.name = request.form['name']
+        client.contact = request.form['contact']
+        client.contact_phone = request.form['contact_phone']
+        client.contact_email = request.form['contact_email']
+
+        db.session.commit()
+
+        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+
+    customer = Customer.query.get_or_404(customer_id)
+    client = Client.query.get_or_404(client_id)
+    return render_template('clients_edit.html', customer_id=customer_id, customer=customer, client=client)
+
+
+@app.route('/clients/del/<int:customer_id>/<int:client_id>/', methods=('GET', ))
+def clients_del(customer_id, client_id):
+    client = Client.query.get_or_404(client_id)
+    db.session.delete(client)
+    db.session.commit()
+    return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
 
 
 @app.route('/clients/add/<int:customer_id>/<int:client_id>/', methods=('GET', 'POST'))
@@ -250,9 +302,34 @@ def sites_add(customer_id, client_id):
         db.session.add(site)
         db.session.commit()
 
-        return redirect(url_for('customers_one_client', customer_id=customer_id, client_id=client_id))
+        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
 
     return render_template('customers_add.html')
+
+
+@app.route('/sites/edit/<int:customer_id>/<int:site_id>/', methods=('GET', 'POST'))
+def sites_edit(customer_id, site_id):
+    if request.method == 'POST':
+        site = Site.query.get_or_404(site_id)
+        site.name = request.form['name']
+        site.contact = request.form['contact']
+        site.contact_phone = request.form['contact_phone']
+        site.contact_email = request.form['contact_email']
+
+        db.session.commit()
+
+        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+
+    site = Site.query.get_or_404(site_id)
+    return render_template('sites_edit.html', customer_id=customer_id, site=site)
+
+
+@app.route('/sites/del/<int:customer_id>/<int:site_id>/', methods=('GET', ))
+def sites_del(customer_id, site_id):
+    site = Site.query.get_or_404(site_id)
+    db.session.delete(site)
+    db.session.commit()
+    return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
 
 
 @app.route('/create_db', methods=['GET', 'POST'])
