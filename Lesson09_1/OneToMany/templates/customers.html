@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
+<script>
+function goto_forks() {
+  window.open("https://www.w3schools.com");
+}
+
+</script>
+
 {% block content %}
     <h2>{% block title %} Customers {% endblock %}</h2>
     <table class="table_with_border_wide">
@@ -11,8 +18,10 @@
             <td>{{customer.contact}}</td>
             <td>{{customer.contact_phone}}</td><td>{{customer.contact_email}}</td>
             <td>
-                <a href="{{url_for('customers_edit', customer_id=customer.id)}}"><img src="/static/images/Edit.png" class="action_image"></a>
-                <a href="{{url_for('customers_del', customer_id=customer.id)}}"><img src="/static/images/Delete.png" class="action_image"></a>
+                <a href="{{url_for('customers_edit', customer_id=customer.id)}}">
+                    <img src="/static/images/Edit.png" class="action_image"></a>
+                <a href="{{url_for('customers_del', customer_id=customer.id)}}">
+                    <img src="/static/images/Delete.png" class="action_image"></a>
             </td>
         </tr>
     {% endfor %}
@@ -36,15 +45,18 @@
                 <td>{{client.contact}}</td>
                 <td>{{client.contact_phone}}</td><td>{{client.contact_email}}</td>
                 <td>
-                <a href="{{url_for('clients_edit', customer_id=customer_id, client_id=client.id)}}"><img src="/static/images/Edit.png" class="action_image"></a>
-                <a href="{{url_for('clients_del', customer_id=customer_id, client_id=client.id)}}"><img src="/static/images/Delete.png" class="action_image"></a>
+                <a href="{{url_for('clients_edit', customer_id=customer_id, client_id=client.id)}}">
+                    <img src="/static/images/Edit.png" class="action_image"></a>
+                <a href="{{url_for('clients_del', customer_id=customer_id, client_id=client.id)}}">
+                    <img src="/static/images/Delete.png" class="action_image"></a>
                 </td>
             </tr>
             {% endif %}
         {% endfor %}
             <tr>
                 <td>
-                    <a href="{{url_for('clients_add', customer_id=customer_id)}}"><img src="/static/images/Add.png" class="action_image"></a>
+                    <a href="{{url_for('clients_add', customer_id=customer_id)}}">
+                        <img src="/static/images/Add.png" class="action_image"></a>
                 </td>
                 <td></td><td></td><td></td><td></td><td></td><td></td>
             </tr>
@@ -53,7 +65,6 @@
         {% for client in customer.clients %}
             {% if client_id is none or (client_id is not none and client.id == client_id) %}
                 <h3>Sites for {{client.name}}:</h3>
-<!--                <button><a href="{{url_for('sites_add', customer_id=customer_id, client_id=client.id)}}">Add site</a></button><br><br>-->
                 <table class="table_with_border_wide">
                     <tr><th>ID</th><th>Name</th><th>Contact</th><th>Contact Phone</th><th>Contact email</th><th></th></tr>
                     {% for site in client.sites %}
@@ -61,8 +72,12 @@
                             <td>{{site.id}}</td><td>{{site.name}}</td><td>{{site.contact}}</td>
                             <td>{{site.contact_phone}}</td><td>{{site.contact_email}}</td>
                             <td>
-                                <a href="{{url_for('sites_edit', customer_id=customer_id, site_id=site.id)}}"><img src="/static/images/Edit.png" class="action_image"></a>
-                                <a href="{{url_for('sites_del', customer_id=customer_id, site_id=site.id)}}"><img src="/static/images/Delete.png" class="action_image"></a>
+                                <a href="{{url_for('sites_edit', customer_id=customer_id, site_id=site.id)}}">
+                                    <img src="/static/images/Edit.png" class="action_image"></a>
+                                <a href="{{url_for('sites_del', customer_id=customer_id, site_id=site.id)}}">
+                                    <img src="/static/images/Delete.png" class="action_image"></a>
+                                <a href="{{url_for('fork_lifts', customer_id=customer_id, client_id=client.id, site_id=site.id)}}">
+                                    <img src="/static/images/ForkLift.png" class="action_image"></a>
                             </td>
                         </tr>
                     {% endfor %}

@@ -133,14 +133,23 @@ class App:
                 sites_info = customer_info[client_name]
                 for site_name, site_data in sites_info.items():
                     info = site_data['info']
-                    # gateways = site_data['gateways']
                     site_record = Site(
                         name=info['name'], contact=info['contact'], contact_phone=info['contact_phone'],
                         contact_email=info['contact_email'], client_id=client_id)
                     db.session.add(site_record)
-            db.session.commit()
+                    db.session.commit()
+                    site_id = site_record.id
+                    fork_lift_list = site_data['gateways']
+                    for fork_lift_id in fork_lift_list:
+                        fork_id_str = f'fork {fork_lift_id}'
+                        fork_lift = ForkLift(fork_id=fork_lift_id, name=fork_id_str, site_id=site_id)
+                        db.session.add(fork_lift)
+                    db.session.commit()
         sites = Site.query.all()
         print(f'sites: {sites}')
+
+        fork_lifts_list = ForkLift.query.all()
+        print(f'fork_lifts: {fork_lifts_list}')
 
         return customers, clients, sites
 
@@ -183,6 +192,17 @@ class Site(db.Model):
 
     def __repr__(self):
         return f'<Site "{self.name[:20]}...", id={self.id}>'
+
+
+class ForkLift(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    fork_id = db.Column(db.Integer, nullable=False, unique=True)
+    name = db.Column(db.String(50), nullable=False)
+
+    site_id = db.Column(db.Integer, db.ForeignKey('site.id'))
+
+    def __repr__(self):
+        return f'<ForkLift "{self.name[:20]}...", id={self.id}, site_id={self.site_id}>'
 
 
 @app.route('/customers')
@@ -330,6 +350,57 @@ def sites_del(customer_id, site_id):
     db.session.delete(site)
     db.session.commit()
     return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+
+
+@app.route('/fork_lifts/<int:customer_id>/<int:client_id>/<int:site_id>/', methods=('GET', ))
+def fork_lifts(customer_id, client_id, site_id):
+    customer = Customer.query.get_or_404(customer_id)
+    client = Client.query.get_or_404(client_id)
+    site = Site.query.get_or_404(site_id)
+    fork_lifts_list = ForkLift.query.filter_by(site_id=site_id).all()
+    return render_template('fork_lifts.html', customer=customer, client=client, site=site, fork_lifts=fork_lifts_list)
+
+
+@app.route('/fork_lifts/add/<int:customer_id>/<int:client_id>/<int:site_id>/', methods=('GET', ))
+def fork_lifts_add(customer_id, client_id, site_id):
+    if request.method == 'POST':
+        fork_id = request.form['fork_id']
+        name = request.form['name']
+
+        fork_lift = ForkLift(fork_id=fork_id, name=name, site_id=site_id)
+        db.session.add(fork_lift)
+        db.session.commit()
+
+        return redirect(url_for('fork_lifts', customer_id=customer_id, client_id=client_id, site_id=site_id))
+
+    customer = Customer.query.get_or_404(customer_id)
+    client = Client.query.get_or_404(client_id)
+    site = Site.query.get_or_404(site_id)
+    return render_template('fork_lifts_add.html', customer=customer, client=client, site=site)
+
+
+@app.route('/fork_lifts/edit/<int:customer_id>/<int:client_id>/<int:site_id>/<int:fork_id>', methods=('GET', 'POST'))
+def fork_lifts_edit(customer_id, client_id, site_id, fork_id):
+    if request.method == 'POST':
+        fork_lift = ForkLift.query.filter_by(fork_id=fork_id).first()
+        fork_lift.fork_id = request.form['fork_id']
+        fork_lift.name = request.form['name']
+
+        db.session.commit()
+
+        return redirect(url_for('fork_lifts', customer_id=customer_id, client_id=client_id, site_id=site_id))
+
+    fork_lift = ForkLift.query.filter_by(fork_id=fork_id).first()
+    return render_template('fork_lifts_edit.html', customer_id=customer_id, client_id=client_id, site_id=site_id,
+                           fork_lift=fork_lift)
+
+
+@app.route('/fork_lifts/del/<int:customer_id>/<int:client_id>/<int:site_id>/<int:fork_id>', methods=('GET', ))
+def fork_lifts_del(customer_id, client_id, site_id, fork_id):
+    fork_lift = ForkLift.query.filter_by(fork_id=fork_id).first()
+    db.session.delete(fork_lift)
+    db.session.commit()
+    return redirect(url_for('fork_lifts', customer_id=customer_id, client_id=client_id, site_id=site_id))
 
 
 @app.route('/create_db', methods=['GET', 'POST'])
