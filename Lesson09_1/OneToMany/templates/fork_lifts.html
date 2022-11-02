@@ -10,19 +10,23 @@
             <td>{{fork_lift.id}}</td>
             <td>{{fork_lift.name}}</td>
             <td>
-                <a href="{{url_for('fork_lifts_edit', customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.id)}}">
+                <a href="{{url_for('fork_lifts_edit', user_id=user_id, customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.id)}}">
                     <img src="/static/images/Edit.png" class="action_image"></a>
-                <a href="{{url_for('fork_lifts_del', customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.id)}}">
+                {% if user_role != 'user' %}
+                <a href="{{url_for('fork_lifts_del', user_id=user_id, customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.id)}}">
                     <img src="/static/images/Delete.png" class="action_image"></a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}
+        {% if user_role != 'user' %}
         <tr>
             <td>
-                <a href="{{url_for('fork_lifts_add', customer_id=customer.id, client_id=client.id, site_id=site.id)}}">
+                <a href="{{url_for('fork_lifts_add', user_id=user_id, customer_id=customer.id, client_id=client.id, site_id=site.id)}}">
                     <img src="/static/images/Add.png" class="action_image"></a>
             </td>
             <td></td><td></td>
         </tr>
+        {% endif %}
     </table>
 {% endblock %}

@@ -1,7 +1,8 @@
+import json
 import os
 import socket
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm.attributes import flag_modified
 
@@ -33,6 +34,17 @@ class App:
         url = f"http://{real_ip}:{port}"
         print(f'start serving server site (1->n) on url: {url}')
         app.run(host=real_ip, port=port)
+
+    @staticmethod
+    def get_params():
+        data = {}
+        if request.method == 'GET':
+            args = request.args
+            data = args.to_dict()
+        elif request.method == 'POST':
+            res = request.get_data()
+            data = json.loads(res)
+        return data
 
     @classmethod
     def create_db(cls):
@@ -151,7 +163,46 @@ class App:
         fork_lifts_list = ForkLift.query.all()
         print(f'fork_lifts: {fork_lifts_list}')
 
+        print('adding users:')
+        users = {
+            'doron': {'password': '1234', 'user_role': 'admin'},
+            'henry': {'password': '1234', 'user_role': 'admin'},
+            'john': {'password': '1234', 'user_role': 'manager', 'customers': ['Anger 207']},
+            'intel': {'password': '1234', 'user_role': 'manager', 'customers': ['Leasing']},
+            'moshe': {'password': '1234', 'user_role': 'user', 'customers': ['Anger 207']},
+            'haim': {'password': '1234', 'user_role': 'user', 'customers': ['Leasing']},
+        }
+        customers_dict = {customer.name: customer for customer in customers}
+        for user_name, user_info in users.items():
+            user = User(name=user_name, password=user_info['password'], user_role=user_info['user_role'])
+            db.session.add(user)
+            db.session.commit()
+            customer_users = user_info['customers'] if 'customers' in user_info else []
+            for customer_name in customer_users:
+                customer = customers_dict[customer_name]
+                # customer_user = CustomerUsers(customer_id=customer.id, user_id=user.id)
+                customer.users.append(user)
+                db.session.commit()
+                # print(f'\tcustomer:{customer.name}: {customer.users}')
+        for customer_name, customer in customers_dict.items():
+            print(f'\tcustomer:{customer.name}: {customer.users}')
         return customers, clients, sites
+
+
+CustomerUsers = db.Table('CustomerUsers',
+                         db.Column('customer_id', db.Integer, db.ForeignKey('customer.id')),
+                         db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+                         )
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    password = db.Column(db.String(50), nullable=False)
+    user_role = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        return f'<User "{self.name[:20]}", id={self.id}>'
 
 
 class Customer(db.Model):
@@ -162,6 +213,7 @@ class Customer(db.Model):
     contact_email = db.Column(db.String(30))
 
     clients = db.relationship('Client', backref='client')
+    users = db.relationship('User', secondary=CustomerUsers, backref='customers')
 
     def __repr__(self):
         return f'<Customer "{self.name}", id={self.id}>'
@@ -178,7 +230,7 @@ class Client(db.Model):
     sites = db.relationship('Site', backref='site')
 
     def __repr__(self):
-        return f'<Client "{self.name[:20]}...", id={self.id}>'
+        return f'<Client "{self.name}", id={self.id}>'
 
 
 class Site(db.Model):
@@ -191,7 +243,7 @@ class Site(db.Model):
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 
     def __repr__(self):
-        return f'<Site "{self.name[:20]}...", id={self.id}>'
+        return f'<Site "{self.name}", id={self.id}>'
 
 
 class ForkLift(db.Model):
@@ -201,29 +253,65 @@ class ForkLift(db.Model):
     site_id = db.Column(db.Integer, db.ForeignKey('site.id'))
 
     def __repr__(self):
-        return f'<ForkLift "{self.name[:20]}...", id={self.id}, site_id={self.site_id}>'
+        return f'<ForkLift "{self.name}", id={self.id}, site_id={self.site_id}>'
 
 
-@app.route('/customers')
-def customers():
-    customers_list = Customer.query.all()
-    return render_template('customers.html', customers=customers_list, customer_id=None, client_id=None)
+@app.route('/', methods=['GET'])
+def login_form():
+    print(f'login_form')
+    return render_template('login.html')
 
 
-@app.route('/customers/<int:customer_id>/')
-def customers_one(customer_id):
+@app.route('/login', methods=['GET'])
+def login_form_apply():
+    data = App.get_params()
+    print(f'login_form_apply. data:{data}')
+    user_name, password, remember = data['user_name'], data['password'], data['remember']
+    result = {'is_ok': True, 'message': 'OK', 'user_name': user_name, 'user_id': -1}
+    user = User.query.filter_by(name=user_name).first()
+    if password != user.password:
+        print('login error')
+        result = {'is_ok': False, 'message': "user name and password doesn't match. Please try again", 'user_id': -1}
+    else:
+        print(f'login ok with user_id {user.id}')
+        result['user_id'] = user.id
+        # return redirect(url_for('customers', user_id=user.id, customer_id=None, client_id=None))
+
+    return jsonify(result)
+
+
+@app.route('/customers/<int:user_id>/')
+def customers(user_id):
+    customers_list_temp = Customer.query.all()
+    user = User.query.filter_by(id=user_id).first()
+    inc_customers = {customer.id: None for customer in user.customers}
+    if user.user_role == 'admin':
+        customers_list = customers_list_temp
+    else:
+        customers_list = [customer for customer in customers_list_temp if customer.id in inc_customers]
+    html = render_template('customers.html', user_id=user_id, user_role=user.user_role,
+                           customers=customers_list, customer_id=None, client_id=None)
+    return html
+
+
+@app.route('/customers/<int:user_id>/<int:customer_id>/')
+def customers_one(user_id, customer_id):
+    user = User.query.filter_by(id=user_id).first()
     customer = Customer.query.get_or_404(customer_id)
-    return render_template('customers.html', customers=[customer], customer_id=customer_id, client_id=None)
+    return render_template('customers.html', user_id=user_id, user_role=user.user_role,
+                           customers=[customer], customer_id=customer_id, client_id=None)
 
 
-@app.route('/customers/<int:customer_id>/clients/<int:client_id>')
-def customers_one_client(customer_id, client_id):
+@app.route('/customers/<int:user_id>/<int:customer_id>/clients/<int:client_id>')
+def customers_one_client(user_id, customer_id, client_id):
+    user = User.query.filter_by(id=user_id).first()
     customer = Customer.query.get_or_404(customer_id)
-    return render_template('customers.html', customers=[customer], customer_id=customer_id, client_id=client_id)
+    return render_template('customers.html', user_id=user_id, user_role=user.user_role,
+                           customers=[customer], customer_id=customer_id, client_id=client_id)
 
 
-@app.route('/customers/add', methods=('GET', 'POST'))
-def customers_add():
+@app.route('/customers/add/<int:user_id>/', methods=('GET', 'POST'))
+def customers_add(user_id):
     if request.method == 'POST':
         name = request.form['name']
         contact = request.form['contact']
@@ -234,13 +322,13 @@ def customers_add():
         db.session.add(customer)
         db.session.commit()
 
-        return redirect(url_for('customers', customer_id=customer.id, client_id=None))
+        return redirect(url_for('customers', user_id=user_id, customer_id=customer.id, client_id=None))
 
-    return render_template('customers_add.html')
+    return render_template('customers_add.html', user_id=user_id)
 
 
-@app.route('/customers/edit/<int:customer_id>', methods=('GET', 'POST'))
-def customers_edit(customer_id):
+@app.route('/customers/edit/<int:user_id>/<int:customer_id>/', methods=('GET', 'POST'))
+def customers_edit(user_id, customer_id):
     if request.method == 'POST':
         customer = Customer.query.get_or_404(customer_id)
         customer.name = request.form['name']
@@ -250,22 +338,22 @@ def customers_edit(customer_id):
 
         db.session.commit()
 
-        return redirect(url_for('customers', customer_id=customer.id, client_id=None))
+        return redirect(url_for('customers', user_id=user_id, customer_id=customer.id, client_id=None))
 
     customer = Customer.query.get_or_404(customer_id)
-    return render_template('customers_edit.html', customer_id=customer_id, customer=customer)
+    return render_template('customers_edit.html', user_id=user_id, customer_id=customer_id, customer=customer)
 
 
-@app.route('/customers/del/<int:customer_id>/', methods=('GET', ))
-def customers_del(customer_id):
+@app.route('/customers/del/<int:user_id>/<int:customer_id>/', methods=('GET', ))
+def customers_del(user_id, customer_id):
     customer = Customer.query.get_or_404(customer_id)
     db.session.delete(customer)
     db.session.commit()
-    return render_template('customers.html', customer_id=None, customer=None)
+    return redirect(url_for('customers', user_id=user_id, customer_id=customer.id))
 
 
-@app.route('/clients/add/<int:customer_id>/', methods=('GET', 'POST'))
-def clients_add(customer_id):
+@app.route('/clients/add/<int:user_id>/<int:customer_id>/', methods=('GET', 'POST'))
+def clients_add(user_id, customer_id):
     if request.method == 'POST':
         name = request.form['name']
         contact = request.form['contact']
@@ -277,13 +365,13 @@ def clients_add(customer_id):
         db.session.add(client)
         db.session.commit()
 
-        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+        return redirect(url_for('customers_one', user_id=user_id, customer_id=customer_id, client_id=None))
 
-    return render_template('clients_add.html')
+    return render_template('clients_add.html', user_id=user_id)
 
 
-@app.route('/clients/edit/<int:customer_id>/<int:client_id>/', methods=('GET', 'POST'))
-def clients_edit(customer_id, client_id):
+@app.route('/clients/edit/<int:user_id>/<int:customer_id>/<int:client_id>/', methods=('GET', 'POST'))
+def clients_edit(user_id, customer_id, client_id):
     if request.method == 'POST':
         client = Client.query.get_or_404(client_id)
         client.name = request.form['name']
@@ -293,23 +381,24 @@ def clients_edit(customer_id, client_id):
 
         db.session.commit()
 
-        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+        return redirect(url_for('customers_one', user_id=user_id, customer_id=customer_id, client_id=None))
 
     customer = Customer.query.get_or_404(customer_id)
     client = Client.query.get_or_404(client_id)
-    return render_template('clients_edit.html', customer_id=customer_id, customer=customer, client=client)
+    return render_template('clients_edit.html', user_id=user_id,
+                           customer_id=customer_id, customer=customer, client=client)
 
 
-@app.route('/clients/del/<int:customer_id>/<int:client_id>/', methods=('GET', ))
-def clients_del(customer_id, client_id):
+@app.route('/clients/del/<int:user_id>/<int:customer_id>/<int:client_id>/', methods=('GET', ))
+def clients_del(user_id, customer_id, client_id):
     client = Client.query.get_or_404(client_id)
     db.session.delete(client)
     db.session.commit()
-    return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+    return redirect(url_for('customers_one', user_id=user_id, customer_id=customer_id, client_id=None))
 
 
-@app.route('/clients/add/<int:customer_id>/<int:client_id>/', methods=('GET', 'POST'))
-def sites_add(customer_id, client_id):
+@app.route('/clients/add/<int:user_id>/<int:customer_id>/<int:client_id>/', methods=('GET', 'POST'))
+def sites_add(user_id, customer_id, client_id):
     if request.method == 'POST':
         name = request.form['name']
         contact = request.form['contact']
@@ -321,13 +410,13 @@ def sites_add(customer_id, client_id):
         db.session.add(site)
         db.session.commit()
 
-        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+        return redirect(url_for('customers_one', user_id=user_id, customer_id=customer_id, client_id=None))
 
-    return render_template('customers_add.html')
+    return render_template('sites_add.html', user_id=user_id)
 
 
-@app.route('/sites/edit/<int:customer_id>/<int:site_id>/', methods=('GET', 'POST'))
-def sites_edit(customer_id, site_id):
+@app.route('/sites/edit/<int:user_id>/<int:customer_id>/<int:site_id>/', methods=('GET', 'POST'))
+def sites_edit(user_id, customer_id, site_id):
     if request.method == 'POST':
         site = Site.query.get_or_404(site_id)
         site.name = request.form['name']
@@ -337,31 +426,33 @@ def sites_edit(customer_id, site_id):
 
         db.session.commit()
 
-        return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+        return redirect(url_for('customers_one', user_id=user_id, customer_id=customer_id, client_id=None))
 
     site = Site.query.get_or_404(site_id)
-    return render_template('sites_edit.html', customer_id=customer_id, site=site)
+    return render_template('sites_edit.html', user_id=user_id, customer_id=customer_id, site=site)
 
 
-@app.route('/sites/del/<int:customer_id>/<int:site_id>/', methods=('GET', ))
-def sites_del(customer_id, site_id):
+@app.route('/sites/del/<int:user_id>/<int:customer_id>/<int:site_id>/', methods=('GET', ))
+def sites_del(user_id, customer_id, site_id):
     site = Site.query.get_or_404(site_id)
     db.session.delete(site)
     db.session.commit()
-    return redirect(url_for('customers_one', customer_id=customer_id, client_id=None))
+    return redirect(url_for('customers_one', user_id=user_id, customer_id=customer_id, client_id=None))
 
 
-@app.route('/fork_lifts/<int:customer_id>/<int:client_id>/<int:site_id>/', methods=('GET', ))
-def fork_lifts(customer_id, client_id, site_id):
+@app.route('/fork_lifts/<int:user_id>/<int:customer_id>/<int:client_id>/<int:site_id>/', methods=('GET', ))
+def fork_lifts(user_id, customer_id, client_id, site_id):
     customer = Customer.query.get_or_404(customer_id)
     client = Client.query.get_or_404(client_id)
     site = Site.query.get_or_404(site_id)
     fork_lifts_list = ForkLift.query.filter_by(site_id=site_id).all()
-    return render_template('fork_lifts.html', customer=customer, client=client, site=site, fork_lifts=fork_lifts_list)
+    user = User.query.filter_by(id=user_id).first()
+    return render_template('fork_lifts.html', user_id=user_id, user_role=user.user_role,
+                           customer=customer, client=client, site=site, fork_lifts=fork_lifts_list)
 
 
-@app.route('/fork_lifts/add/<int:customer_id>/<int:client_id>/<int:site_id>/', methods=('GET', 'POST'))
-def fork_lifts_add(customer_id, client_id, site_id):
+@app.route('/fork_lifts/add/<int:user_id>/<int:customer_id>/<int:client_id>/<int:site_id>/', methods=('GET', 'POST'))
+def fork_lifts_add(user_id, customer_id, client_id, site_id):
     if request.method == 'POST':
         name = request.form['name']
 
@@ -369,40 +460,44 @@ def fork_lifts_add(customer_id, client_id, site_id):
         db.session.add(fork_lift)
         db.session.commit()
 
-        return redirect(url_for('fork_lifts', customer_id=customer_id, client_id=client_id, site_id=site_id))
+        return redirect(url_for('fork_lifts', user_id=user_id,
+                                customer_id=customer_id, client_id=client_id, site_id=site_id))
 
     customer = Customer.query.get_or_404(customer_id)
     client = Client.query.get_or_404(client_id)
     site = Site.query.get_or_404(site_id)
-    return render_template('fork_lifts_add.html', customer=customer, client=client, site=site)
+    return render_template('fork_lifts_add.html', user_id=user_id, customer=customer, client=client, site=site)
 
 
-@app.route('/fork_lifts/edit/<int:customer_id>/<int:client_id>/<int:site_id>/<int:fork_id>', methods=('GET', 'POST'))
-def fork_lifts_edit(customer_id, client_id, site_id, fork_id):
+@app.route('/fork_lifts/edit/<int:user_id>/<int:customer_id>/<int:client_id>/<int:site_id>/<int:fork_id>/',
+           methods=('GET', 'POST'))
+def fork_lifts_edit(user_id, customer_id, client_id, site_id, fork_id):
     if request.method == 'POST':
         fork_lift = ForkLift.query.get_or_404(fork_id)
         fork_lift.name = request.form['name']
         db.session.commit()
 
-        return redirect(url_for('fork_lifts', customer_id=customer_id, client_id=client_id, site_id=site_id))
+        return redirect(url_for('fork_lifts', user_id=user_id,
+                                customer_id=customer_id, client_id=client_id, site_id=site_id))
 
     fork_lift = ForkLift.query.get_or_404(fork_id)
-    return render_template('fork_lifts_edit.html', customer_id=customer_id, client_id=client_id, site_id=site_id,
-                           fork_lift=fork_lift)
+    return render_template('fork_lifts_edit.html', user_id=user_id,
+                           customer_id=customer_id, client_id=client_id, site_id=site_id, fork_lift=fork_lift)
 
 
-@app.route('/fork_lifts/del/<int:customer_id>/<int:client_id>/<int:site_id>/<int:fork_id>', methods=('GET', ))
-def fork_lifts_del(customer_id, client_id, site_id, fork_id):
+@app.route('/fork_lifts/del/<int:user_id>/<int:customer_id>/<int:client_id>/<int:site_id>/<int:fork_id>/',
+           methods=('GET', ))
+def fork_lifts_del(user_id, customer_id, client_id, site_id, fork_id):
     fork_lift = ForkLift.query.get_or_404(fork_id)
     db.session.delete(fork_lift)
     db.session.commit()
-    return redirect(url_for('fork_lifts', customer_id=customer_id, client_id=client_id, site_id=site_id))
+    return redirect(url_for('fork_lifts', user_id=user_id, customer_id=customer_id, client_id=client_id, site_id=site_id))
 
 
 @app.route('/create_db', methods=['GET', 'POST'])
 def create_db():
-    customers_list, clients, sites = App.create_db()
-    return redirect(url_for('customers'))
+    App.create_db()
+    return redirect(url_for('customers', user_id=1))
 
 
 if __name__ == '__main__':

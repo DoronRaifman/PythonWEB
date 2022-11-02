@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forks Server Manager</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/css/App.css">
+    <script src="/static/js/main.js"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+<div>
+    <h1>Forks Server Manager</h1>
+    <h3>Please login</h3>
+    <div>
+        <table class="table_with_border">
+            <tr>
+                <td><label for="uname"><b>Username</b></label></td>
+                <td><input type="text" placeholder="Enter Username" id="user_name" name="uname" required></td>
+            </tr>
+            <tr>
+                <td><label for="psw"><b>Password</b></label></td>
+                <td><input type="password" placeholder="Enter Password" id="password" name="psw" required></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                    <input type="checkbox" checked="checked" id="remember" name="remember"> Remember me
+                    </label>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td><td><button type="button" onclick="login()">Login</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
