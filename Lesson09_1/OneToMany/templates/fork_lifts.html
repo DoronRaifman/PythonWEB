@@ -4,16 +4,15 @@
     <h2>{% block title %} ForkLifts for site {% endblock %}</h2>
     <h3>customer:{{customer.name}}, client:{{client.name}}, site:{{site.name}}</h3>
     <table class="table_with_border">
-        <tr><th>ID</th><th>Fork_id</th><th>Name</th><th></th></tr>
+        <tr><th>ID</th><th>Name</th><th></th></tr>
     {% for fork_lift in fork_lifts %}
         <tr>
             <td>{{fork_lift.id}}</td>
-            <td>{{fork_lift.fork_id}}</td>
             <td>{{fork_lift.name}}</td>
             <td>
-                <a href="{{url_for('fork_lifts_edit', customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.fork_id)}}">
+                <a href="{{url_for('fork_lifts_edit', customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.id)}}">
                     <img src="/static/images/Edit.png" class="action_image"></a>
-                <a href="{{url_for('fork_lifts_del', customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.fork_id)}}">
+                <a href="{{url_for('fork_lifts_del', customer_id=customer.id, client_id=client.id, site_id=site.id, fork_id=fork_lift.id)}}">
                     <img src="/static/images/Delete.png" class="action_image"></a>
             </td>
         </tr>
