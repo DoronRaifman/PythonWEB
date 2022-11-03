@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 style="width: 100%">{% block title %} Add a New User {% endblock %}</h1>
+    <form method="post">
+        <table class="table_with_border">
+          <tr><th>Parameter</th><th>Value</th></tr>
+          <tr><td>name</td><td><input type="text" name="name"></td></tr>
+          <tr><td>password</td><td><input type="text" name="password"></td></tr>
+          <tr><td>User role</td>
+            <td>
+                {% if user_role != 'user' %}
+                <select name="user_role" id="user_role">
+                    {% if user_role == 'admin' %}
+                        <option value="admin">admin</option>
+                    {% endif %}
+                    {% if user_role != 'user' %}
+                        <option value="manager">manager</option>
+                    {% endif %}
+                        <option value="user">user</option>
+                </select>
+                {% else %}
+                <input type="text" name="user" readonly>
+                {% endif %}
+            </td>
+          </tr>
+          <tr><td></td><td><button type="submit">Add</button></td></tr>
+        </table>
+    </form>
+{% endblock %}
+

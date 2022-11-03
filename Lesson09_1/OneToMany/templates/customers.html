@@ -1,12 +1,5 @@
 {% extends 'base.html' %}
 
-<script>
-function goto_forks() {
-  window.open("https://www.w3schools.com");
-}
-
-</script>
-
 {% block content %}
     <h2>{% block title %} Customers {% endblock %}</h2>
     <table class="table_with_border_wide">
@@ -26,6 +19,8 @@ function goto_forks() {
                 <a href="{{url_for('customers_del', user_id=user_id, customer_id=customer.id)}}">
                     <img src="/static/images/Delete.png" class="action_image"></a>
                 {% endif %}
+                <a href="{{url_for('users', user_id=user_id)}}">
+                    <img src="/static/images/User.png" class="action_image"></a>
             </td>
         </tr>
     {% endfor %}

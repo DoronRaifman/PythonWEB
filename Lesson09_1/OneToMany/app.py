@@ -167,6 +167,7 @@ class App:
         users = {
             'doron': {'password': '1234', 'user_role': 'admin'},
             'henry': {'password': '1234', 'user_role': 'admin'},
+            'multi': {'password': '1234', 'user_role': 'manager', 'customers': ['Anger 207', 'Leasing']},
             'john': {'password': '1234', 'user_role': 'manager', 'customers': ['Anger 207']},
             'intel': {'password': '1234', 'user_role': 'manager', 'customers': ['Leasing']},
             'moshe': {'password': '1234', 'user_role': 'user', 'customers': ['Anger 207']},
@@ -492,6 +493,72 @@ def fork_lifts_del(user_id, customer_id, client_id, site_id, fork_id):
     db.session.delete(fork_lift)
     db.session.commit()
     return redirect(url_for('fork_lifts', user_id=user_id, customer_id=customer_id, client_id=client_id, site_id=site_id))
+
+
+@app.route('/users/<int:user_id>/', methods=['GET'])
+def users(user_id):
+    customers_list_temp = Customer.query.all()
+    user_list = User.query.all()
+    user = User.query.filter_by(id=user_id).first()
+    inc_customers = {customer.id: None for customer in user.customers}
+    if user.user_role == 'admin':
+        customers_list = customers_list_temp
+    else:
+        customers_list = [customer for customer in customers_list_temp if customer.id in inc_customers]
+    return render_template('users.html', user_id=user_id, user_role=user.user_role,
+                           customers=customers_list, users=user_list)
+
+
+@app.route('/users/edit/<int:user_id>/<string:user_role>/<int:user_id_edit>/', methods=['GET', 'POST'])
+def users_edit(user_id, user_role, user_id_edit):
+    user = User.query.get_or_404(user_id_edit)
+    if request.method == 'POST':
+        user.name = request.form['name']
+        user.password = request.form['password']
+        user.user_role = request.form['user_role']
+
+        db.session.commit()
+        url = url_for('users', user_id=user_id)
+        return redirect(url)
+
+    return render_template('users_edit.html', user_id=user_id, user_role=user_role, user=user)
+
+
+@app.route('/users/add/<int:user_id>/<string:user_role><int:customer_id>/', methods=('GET', 'POST'))
+def users_add(user_id, user_role, customer_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        password = request.form['password']
+        user_role = request.form['user_role']
+
+        user = User.query.filter_by(name=name).first()
+        if user is None:
+            user = User(name=name, password=password, user_role=user_role)
+            db.session.add(user)
+        if user_role != 'admin':
+            customer = Customer.query.get_or_404(customer_id)
+            customer.users.append(user)
+            db.session.commit()
+
+        return redirect(url_for('users', user_id=user_id))
+
+    return render_template('users_add.html', user_id=user_id, user_role=user_role, customer_id=customer_id)
+
+
+@app.route('/users/del/<int:user_id>/<int:user_id_del>/<int:customer_id>/', methods=('GET', ))
+def users_del(user_id, user_id_del, customer_id):
+    user = User.query.get_or_404(user_id_del)
+    customer = Customer.query.get_or_404(customer_id)
+    customer_users = list(customer.users)
+    customer.users.clear(user)
+    for user_to_add in customer_users:
+        if user_to_add.id != user_id_del:
+            customer.users.append(user_to_add)
+    db.session.commit()
+    if len(user.customers) == 0:
+        db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('users', user_id=user_id))
 
 
 @app.route('/create_db', methods=['GET', 'POST'])

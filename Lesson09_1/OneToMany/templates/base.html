@@ -56,8 +56,8 @@
 <body>
     <nav>
         <a href="{{ url_for('customers', user_id=user_id) }}">Customers</a>
+        <a href="{{ url_for('users', user_id=user_id) }}">Users</a>
         {% if user_role == 'admin' %}
-            <a href="#">Users</a>
             <a href="{{ url_for('create_db') }}">Re-init DB</a>
         {% endif %}
         <a href="#">About</a>

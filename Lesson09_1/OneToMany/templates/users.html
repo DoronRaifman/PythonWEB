@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3>{% block title %} Users {% endblock %}</h3>
+    {% for customer in customers %}
+    <h3>Users for customer {{customer.name}}:</h3>
+    <table class="table_with_border">
+        <tr><th>ID</th><th>Name</th><th>User role</th><th></th></tr>
+        {% for user in customer.users %}
+        <tr>
+            <td>{{user.id}}</td><td>{{user.name}}</td><td>{{user.user_role}}</td>
+            <td>
+                {% if user_role != 'user' or user.id == user_id %}
+                    <a href="{{url_for('users_edit', user_id=user_id, user_role=user_role, user_id_edit=user.id)}}">
+                        <img src="/static/images/Edit.png" class="action_image"></a>
+                {% endif %}
+                {% if user_role != 'user' %}
+                    <a href="{{url_for('users_del', user_id=user_id, user_id_del=user.id, customer_id=customer.id)}}">
+                        <img src="/static/images/Delete.png" class="action_image"></a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                {% if user_role != 'user' %}
+                    <a href="{{url_for('users_add', user_id=user_id, user_role=user_role, customer_id=customer.id)}}">
+                        <img src="/static/images/Add.png" class="action_image"></a>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    {% endfor %}
+
+    {% if user_role == 'admin' %}
+        <h3>Admin users</h3>
+        <table class="table_with_border">
+            <tr><th>ID</th><th>Name</th><th>User role</th><th></th></tr>
+            {% for user in users %}
+                {% if user.user_role == 'admin' %}
+                    <tr>
+                        <td>{{user.id}}</td><td>{{user.name}}</td><td>{{user.user_role}}</td>
+                        <td>
+                            <a href="{{url_for('users_edit', user_id=user_id, user_role=user_role, user_id_edit=user.id)}}">
+                                <img src="/static/images/Edit.png" class="action_image"></a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+                    <tr>
+                        <td>
+                            {% if user_role != 'user' %}
+                                <a href="{{url_for('users_add', user_id=user_id, user_role=user_role, customer_id=-1)}}">
+                                    <img src="/static/images/Add.png" class="action_image"></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+        </table>
+
+        <h3>All users</h3>
+        <table class="table_with_border">
+            <tr><th>ID</th><th>Name</th><th>User role</th><th>Customer list</th><th></th></tr>
+            {% for user in users %}
+                {% if user.user_role != 'admin' %}
+                    <tr>
+                        <td>{{user.id}}</td><td>{{user.name}}</td><td>{{user.user_role}}</td>
+                        <td>
+                            {% for customer in user.customers %}
+                            {{customer.name}},
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{{url_for('users_edit', user_id=user_id, user_role=user_role, user_id_edit=user.id)}}">
+                                <img src="/static/images/Edit.png" class="action_image"></a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
