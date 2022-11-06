@@ -59,6 +59,7 @@
         <a href="{{ url_for('users', user_id=user_id) }}">Users</a>
         {% if user_role == 'admin' %}
             <a href="{{ url_for('create_db') }}">Re-init DB</a>
+            <a href="{{ url_for('create_empty_db') }}">Create empty DB</a>
         {% endif %}
         <a href="#">About</a>
     </nav>

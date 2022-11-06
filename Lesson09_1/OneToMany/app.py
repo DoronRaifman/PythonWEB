@@ -47,6 +47,22 @@ class App:
         return data
 
     @classmethod
+    def create_empty_db(cls):
+        db.drop_all()
+        db.create_all()
+        print('adding users:')
+        users_dict = {
+            'doron': {'password': '1234', 'user_role': 'admin'},
+            'henry': {'password': '1234', 'user_role': 'admin'},
+        }
+        for user_name, user_info in users_dict.items():
+            user = User(name=user_name, password=user_info['password'], user_role=user_info['user_role'])
+            db.session.add(user)
+            db.session.commit()
+        users_list = User.query.all()
+        print(users_list)
+
+    @classmethod
     def create_db(cls):
         db.drop_all()
         db.create_all()
@@ -564,6 +580,12 @@ def users_del(user_id, user_id_del, customer_id):
 @app.route('/create_db', methods=['GET', 'POST'])
 def create_db():
     App.create_db()
+    return redirect(url_for('customers', user_id=1))
+
+
+@app.route('/create_empty_db', methods=['GET', 'POST'])
+def create_empty_db():
+    App.create_empty_db()
     return redirect(url_for('customers', user_id=1))
 
 
