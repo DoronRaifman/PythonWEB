@@ -4,7 +4,7 @@ import socket
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm.attributes import flag_modified
+# from sqlalchemy.orm.attributes import flag_modified
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-class App:
+class Main:
     @classmethod
     def init(cls):
         cls.start()
@@ -281,7 +281,7 @@ def login_form():
 
 @app.route('/login', methods=['GET'])
 def login_form_apply():
-    data = App.get_params()
+    data = Main.get_params()
     print(f'login_form_apply. data:{data}')
     user_name, password, remember = data['user_name'], data['password'], data['remember']
     result = {'is_ok': True, 'message': 'OK', 'user_name': user_name, 'user_id': -1}
@@ -579,15 +579,15 @@ def users_del(user_id, user_id_del, customer_id):
 
 @app.route('/create_db', methods=['GET', 'POST'])
 def create_db():
-    App.create_db()
+    Main.create_db()
     return redirect(url_for('customers', user_id=1))
 
 
 @app.route('/create_empty_db', methods=['GET', 'POST'])
 def create_empty_db():
-    App.create_empty_db()
+    Main.create_empty_db()
     return redirect(url_for('customers', user_id=1))
 
 
 if __name__ == '__main__':
-    App.init()
+    Main.init()
