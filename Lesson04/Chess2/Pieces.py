@@ -67,7 +67,7 @@ class PieceKing(PieceBase):
             delta_row, delta_col = delta
             if self.is_legal_position(row + delta_row, col + delta_col):
                 possible_moves[i] = (row + delta_row, col + delta_col)
-        return  possible_moves
+        return possible_moves
 
 
 

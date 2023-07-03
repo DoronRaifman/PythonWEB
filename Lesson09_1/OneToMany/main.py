@@ -47,22 +47,6 @@ class Main:
         return data
 
     @classmethod
-    def create_empty_db(cls):
-        db.drop_all()
-        db.create_all()
-        print('adding users:')
-        users_dict = {
-            'doron': {'password': '1234', 'user_role': 'admin'},
-            'henry': {'password': '1234', 'user_role': 'admin'},
-        }
-        for user_name, user_info in users_dict.items():
-            user = User(name=user_name, password=user_info['password'], user_role=user_info['user_role'])
-            db.session.add(user)
-            db.session.commit()
-        users_list = User.query.all()
-        print(users_list)
-
-    @classmethod
     def create_db(cls):
         db.drop_all()
         db.create_all()
@@ -205,6 +189,22 @@ class Main:
             print(f'\tcustomer:{customer.name}: {customer.users}')
         return customers, clients, sites
 
+    @classmethod
+    def create_empty_db(cls):
+        db.drop_all()
+        db.create_all()
+        print('adding users:')
+        users_dict = {
+            'doron': {'password': '1234', 'user_role': 'admin'},
+            'henry': {'password': '1234', 'user_role': 'admin'},
+        }
+        for user_name, user_info in users_dict.items():
+            user = User(name=user_name, password=user_info['password'], user_role=user_info['user_role'])
+            db.session.add(user)
+            db.session.commit()
+        users_list = User.query.all()
+        print(users_list)
+
 
 CustomerUsers = db.Table('CustomerUsers',
                          db.Column('customer_id', db.Integer, db.ForeignKey('customer.id')),
@@ -219,7 +219,7 @@ class User(db.Model):
     user_role = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
-        return f'<User "{self.name[:20]}", id={self.id}>'
+        return f'<User "{self.name}", id={self.id}>'
 
 
 class Customer(db.Model):

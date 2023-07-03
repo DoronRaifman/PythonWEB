@@ -93,8 +93,8 @@ class PieceBase:
     Piece factory
     """
     @staticmethod
-    def piece_factory(board, row:int, col:int,
-                      piece_type:PieceType, piece_color:PieceColor):
+    def piece_factory(board, row: int, col: int,
+                      piece_type: PieceType, piece_color: PieceColor):
         import Lesson04.Chess2.Pieces as pcs
         piece_classes = {
             PieceType.Pawn: pcs.PiecePawn, PieceType.Rook: pcs.PieceRook, PieceType.Knight: pcs.PieceKnight,
