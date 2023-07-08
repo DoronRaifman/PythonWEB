@@ -14,7 +14,7 @@ def fibonacci_mishka(n):
 
 
 def fibonacci_ohad(n):
-    result = [0,1]
+    result = [0, 1]
     [result.append(result[-2]+result[-1]) for i in range(n)]
     return result
 

@@ -14,3 +14,5 @@ list1[1:3] = [10]
 print(f'assignment slicing: {list1}')
 my_name = 'Doron'
 print(f'str slicing: {my_name[::-1]}')
+tuple2 = [1, 2, 3, 4, 7, 1, 3, 8, 12, 4, (1, 2, 3)]
+# print(f'exercise: {tuple2[-1][-2:]}')
