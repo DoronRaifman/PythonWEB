@@ -1,7 +1,6 @@
 import json
 import os
 import socket
-
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 # from sqlalchemy.orm.attributes import flag_modified
