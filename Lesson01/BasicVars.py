@@ -20,3 +20,4 @@ j = 7.0
 print(f'j as float = {j}')
 my_name = 'Doron'
 print(f'my_name as str = {my_name}')
+
