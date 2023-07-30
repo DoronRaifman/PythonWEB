@@ -13,7 +13,7 @@ def index():
 
 @app.route('/get_data', methods=['GET', 'POST'])
 def action_page_get():
-    length = 1000
+    length = 10000
     base_time = np.linspace(0.0, 5.0 * 2.0 * np.pi, length)
     noise = np.random.random(length)
     signal = np.round(10.0 * (np.sin(base_time) + 0.3 * noise))
