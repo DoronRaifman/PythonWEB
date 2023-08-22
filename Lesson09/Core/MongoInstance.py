@@ -1,6 +1,7 @@
 # Mongo instance
 import pymongo
 from pymongo import MongoClient
+import pymongo.errors
 
 
 class MongoDBException(Exception):

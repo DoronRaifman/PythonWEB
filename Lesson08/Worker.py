@@ -129,7 +129,7 @@ if __name__ == '__main__':
     worker = Worker()
     worker.connect()
     user_id = 1
-    # worker.fill_initial_data(user_id)
+    worker.fill_initial_data(user_id)
     worker.print_db(user_id)
     worker.disconnect()
 
