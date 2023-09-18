@@ -52,6 +52,7 @@ class Worker:
     def find_user_by_name(self, user_name: str):
         records = DBInstance.find(
             self.table_users_name, where_clause=f"user_name='{user_name}'")
+
         return list(records)
 
     def find_user_by_id(self, user_id: int):
